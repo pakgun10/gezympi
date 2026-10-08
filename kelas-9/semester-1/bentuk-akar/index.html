@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MISI BENTUK AKAR — Petualangan Digital Matematika Kelas 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b1f; --bg2:#0b1030;
+  --cyan:#22d3ee; --cyan-d:#0e7490;
+  --mag:#f472b6; --mag-d:#be185d;
+  --lime:#a3e635; --amber:#fbbf24; --red:#fb7185;
+  --ink:#eef2ff; --mut:#a5b4d4;
+  --card:rgba(17,24,58,.72); --line:rgba(34,211,238,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  color:var(--ink); min-height:100vh;
+  background:
+    radial-gradient(900px 500px at 15% -5%, rgba(34,211,238,.14), transparent 60%),
+    radial-gradient(800px 500px at 90% 10%, rgba(244,114,182,.12), transparent 60%),
+    radial-gradient(700px 600px at 50% 110%, rgba(163,230,53,.07), transparent 60%),
+    var(--bg);
+}
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+  background-image:
+    linear-gradient(rgba(34,211,238,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34,211,238,.05) 1px, transparent 1px);
+  background-size:44px 44px;
+  mask-image:radial-gradient(ellipse at 50% 0%, black 30%, transparent 90%);
+}
+.display{font-family:'Orbitron','Inter',sans-serif; letter-spacing:.04em}
+.wrap{max-width:960px;margin:0 auto;padding:0 18px 40px;position:relative;z-index:1}
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(7,11,31,.82);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.topbar .inner{max-width:960px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px}
+.brand .logo{
+  width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:20px;
+  background:linear-gradient(135deg,var(--cyan),var(--mag));
+  box-shadow:0 0 18px rgba(34,211,238,.55);
+}
+.prog{margin-left:auto;font-size:12.5px;color:var(--mut);white-space:nowrap}
+.pbar{height:6px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin-top:4px;min-width:110px}
+.pbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--lime));border-radius:99px;transition:width .5s}
+
+/* ---------- screens ---------- */
+.screen{display:none}
+.screen.active{display:block;animation:fadeUp .45s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.stage-head{margin:26px 0 18px}
+.kicker{
+  display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.14em;
+  color:var(--cyan);text-transform:uppercase;margin-bottom:10px;
+  border:1px solid var(--line);padding:6px 12px;border-radius:99px;background:rgba(34,211,238,.07);
+}
+h1.title{font-size:clamp(26px,5vw,44px);line-height:1.15;margin:6px 0 10px;
+  background:linear-gradient(92deg,#fff 20%,var(--cyan) 55%,var(--mag) 90%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+h2.stitle{font-size:clamp(21px,4vw,30px);margin:6px 0 8px}
+.lead{color:var(--mut);font-size:15.5px;line-height:1.65;max-width:640px}
+.lead b{color:var(--ink)}
+
+/* ---------- cards & buttons ---------- */
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:20px;margin:14px 0;backdrop-filter:blur(8px);
+  box-shadow:0 8px 30px rgba(0,0,0,.35);
+}
+.card.glow{border-color:rgba(34,211,238,.45);box-shadow:0 0 26px rgba(34,211,238,.14),0 8px 30px rgba(0,0,0,.35)}
+.card h3{font-size:17px;margin-bottom:8px}
+.card p{color:var(--mut);font-size:14.5px;line-height:1.65}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr}}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:99px;border:1px solid var(--line);color:var(--mut);background:rgba(255,255,255,.03)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:15px;cursor:pointer;border:none;
+  padding:13px 26px;border-radius:14px;color:#04121a;text-decoration:none;
+  background:linear-gradient(135deg,var(--cyan),#7dd3fc);
+  box-shadow:0 6px 22px rgba(34,211,238,.35);transition:transform .15s, box-shadow .15s;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(34,211,238,.5)}
+.btn:active{transform:translateY(0)}
+.btn.big{font-size:17px;padding:16px 44px;border-radius:16px}
+.btn.ghost{background:rgba(255,255,255,.05);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.btn.ghost:hover{background:rgba(34,211,238,.1)}
+.btn.pink{background:linear-gradient(135deg,var(--mag),#fb923c);color:#2a0a18;box-shadow:0 6px 22px rgba(244,114,182,.35)}
+.btn.lime{background:linear-gradient(135deg,var(--lime),#4ade80);color:#0c1a05;box-shadow:0 6px 22px rgba(163,230,53,.3)}
+.btn.sm{padding:9px 16px;font-size:13.5px;border-radius:10px}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.navrow{display:flex;justify-content:space-between;gap:12px;margin:26px 0 10px}
+.navrow .spacer{flex:1}
+
+/* ---------- quiz ---------- */
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin:12px 0}
+.qhead{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
+.qnum{
+  flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
+  font-family:'Orbitron';font-weight:700;font-size:14px;color:#04121a;
+  background:linear-gradient(135deg,var(--cyan),var(--lime));
+}
+.qtag{flex:none;font-size:13px;margin-top:7px}
+.qtext{font-size:15.5px;font-weight:600;line-height:1.55;margin-top:4px}
+.opts{display:grid;gap:10px;margin-top:12px}
+.opt{
+  text-align:left;font-family:'Inter';font-size:14.5px;font-weight:500;color:var(--ink);
+  background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.12);
+  border-radius:12px;padding:12px 14px;cursor:pointer;transition:all .15s;width:100%;
+}
+.opt:hover:not(:disabled){border-color:var(--cyan);background:rgba(34,211,238,.08)}
+.opt .k{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.1);font-weight:700;font-size:13px;margin-right:10px}
+.opt.picked{border-color:var(--amber);background:rgba(251,191,36,.1)}
+.opt.correct{border-color:var(--lime);background:rgba(163,230,53,.13);box-shadow:0 0 14px rgba(163,230,53,.25)}
+.opt.wrong{border-color:var(--red);background:rgba(251,113,133,.12);animation:shake .35s}
+.opt.dim{opacity:.55}
+.opt:disabled{cursor:default}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.fb{
+  display:none;margin-top:12px;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.6;
+  background:rgba(34,211,238,.08);border:1px solid var(--line);color:var(--ink);
+}
+.fb.show{display:block;animation:fadeUp .3s}
+.fb b{color:var(--cyan)}
+.scorebox{
+  display:none;text-align:center;padding:22px;border-radius:18px;margin:16px 0;
+  background:linear-gradient(135deg,rgba(34,211,238,.14),rgba(244,114,182,.12));
+  border:1px solid var(--line);
+}
+.scorebox.show{display:block;animation:fadeUp .4s}
+.scorebox .big{font-family:'Orbitron';font-size:40px;font-weight:800;
+  background:linear-gradient(92deg,var(--cyan),var(--lime));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stars{font-size:26px;letter-spacing:4px;margin:6px 0}
+
+/* ---------- materi widgets ---------- */
+.nlwrap{background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:14px;padding:14px 8px;margin:12px 0;overflow-x:auto}
+.nlwrap svg{display:block;min-width:560px;width:100%;height:auto}
+.seg{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.seg .btn.sm.on{background:linear-gradient(135deg,var(--lime),#4ade80);color:#0c1a05}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.tab{
+  font-family:'Orbitron';font-weight:700;font-size:14px;padding:11px 18px;border-radius:12px;cursor:pointer;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--mut);
+}
+.tab.on{background:linear-gradient(135deg,var(--cyan),#7dd3fc);color:#04121a;border-color:transparent;box-shadow:0 4px 16px rgba(34,211,238,.35)}
+.tabpane{display:none}
+.tabpane.on{display:block;animation:fadeUp .35s}
+.rule{background:rgba(163,230,53,.07);border:1px solid rgba(163,230,53,.3);border-radius:12px;padding:12px 14px;font-size:14.5px;line-height:1.6;margin:10px 0}
+.rule b{color:var(--lime)}
+.steps{display:none;margin-top:10px;border-left:3px solid var(--cyan);padding-left:14px}
+.steps.show{display:block;animation:fadeUp .3s}
+.steps li{margin:8px 0;color:var(--mut);font-size:14.5px;line-height:1.6;list-style:none}
+.steps li b{color:var(--ink)}
+table.mini{width:100%;border-collapse:collapse;margin:10px 0;font-size:14.5px}
+table.mini th,table.mini td{border:1px solid var(--line);padding:9px 10px;text-align:center}
+table.mini th{background:rgba(34,211,238,.1);color:var(--cyan);font-weight:700}
+.cmp{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.cmp input{
+  width:90px;text-align:center;font-size:20px;font-weight:700;font-family:'Orbitron';
+  background:rgba(0,0,0,.35);border:1.5px solid var(--line);border-radius:12px;color:var(--ink);padding:10px;
+}
+.cmp input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 12px rgba(34,211,238,.3)}
+.cmpresult{display:none;margin-top:6px}
+.cmpresult.show{display:block;animation:fadeUp .3s}
+.bigexpr{font-family:'Orbitron';font-size:clamp(30px,7vw,52px);font-weight:800;text-align:center;margin:8px 0;
+  background:linear-gradient(92deg,var(--lime),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ---------- matching ---------- */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media(max-width:560px){.match-grid{grid-template-columns:1fr}}
+.mcol h4{text-align:center;color:var(--mut);font-size:13px;letter-spacing:.1em;margin-bottom:8px}
+.mcard{
+  font-family:'Orbitron';font-size:17px;font-weight:700;text-align:center;cursor:pointer;
+  background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.14);
+  border-radius:14px;padding:16px 10px;margin:8px 0;transition:all .15s;color:var(--ink);width:100%;
+}
+.mcard .tag{display:block;font-size:12px;margin-top:6px;font-family:'Inter';font-weight:600;color:var(--mut)}
+.mcard:hover:not(:disabled){border-color:var(--cyan);transform:translateY(-2px)}
+.mcard.sel{border-color:var(--amber);background:rgba(251,191,36,.12);box-shadow:0 0 16px rgba(251,191,36,.3)}
+.mcard.done{border-color:var(--lime);background:rgba(163,230,53,.12);color:var(--lime);cursor:default;box-shadow:0 0 14px rgba(163,230,53,.25)}
+.mcard.err{animation:shake .35s;border-color:var(--red)}
+
+/* ---------- forms / LKPD ---------- */
+label.f{display:block;font-size:13px;font-weight:600;color:var(--mut);margin:12px 0 6px;letter-spacing:.03em}
+input.t,textarea.t,select.t{
+  width:100%;font-family:'Inter';font-size:14.5px;color:var(--ink);
+  background:rgba(0,0,0,.35);border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;
+}
+input.t:focus,textarea.t:focus,select.t:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 12px rgba(34,211,238,.25)}
+textarea.t{min-height:88px;resize:vertical;line-height:1.6}
+table.lkpd{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+table.lkpd th,table.lkpd td{border:1px solid var(--line);padding:9px;text-align:center}
+table.lkpd th{background:rgba(34,211,238,.1);color:var(--cyan)}
+table.lkpd td input{width:100%;background:transparent;border:none;border-bottom:1.5px dashed rgba(255,255,255,.25);color:var(--ink);text-align:center;font-size:14px;padding:6px}
+table.lkpd td input:focus{outline:none;border-bottom-color:var(--cyan)}
+.stepnum{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:9px;font-family:'Orbitron';font-weight:700;font-size:13px;
+  background:linear-gradient(135deg,var(--mag),#fb923c);color:#2a0a18;margin-right:8px}
+details.guru{margin:14px 0;border:1px dashed rgba(251,191,36,.5);border-radius:14px;padding:14px 16px;background:rgba(251,191,36,.05)}
+details.guru summary{cursor:pointer;font-weight:700;color:var(--amber);font-size:15px}
+details.guru .kunci{margin-top:10px;font-size:14px;line-height:1.8;color:var(--mut)}
+details.guru .kunci b{color:var(--lime)}
+
+/* ---------- apersepsi reveal ---------- */
+.pemantik{cursor:pointer}
+.pemantik .hint{display:none;margin-top:10px;padding:11px 13px;border-radius:10px;background:rgba(163,230,53,.07);border:1px solid rgba(163,230,53,.3);font-size:14px;line-height:1.6;color:var(--ink)}
+.pemantik .hint.show{display:block;animation:fadeUp .3s}
+.pemantik .tap{font-size:12.5px;color:var(--cyan);font-weight:600}
+
+/* ---------- reflection ---------- */
+.emo{display:flex;gap:10px;margin:8px 0 4px}
+.emo button{
+  font-size:30px;background:rgba(255,255,255,.05);border:2px solid transparent;border-radius:14px;
+  width:58px;height:58px;cursor:pointer;transition:all .15s;
+}
+.emo button:hover{transform:scale(1.1)}
+.emo button.on{border-color:var(--lime);background:rgba(163,230,53,.12);box-shadow:0 0 14px rgba(163,230,53,.3)}
+
+/* ---------- map modal ---------- */
+.overlay{position:fixed;inset:0;z-index:100;background:rgba(4,7,20,.8);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:18px}
+.overlay.show{display:flex;animation:fadeUp .3s}
+.sheet{background:var(--bg2);border:1px solid var(--line);border-radius:22px;max-width:640px;width:100%;max-height:86vh;overflow:auto;padding:26px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.sheet h3{margin-bottom:4px}
+.map-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+@media(max-width:520px){.map-grid{grid-template-columns:1fr}}
+.node{
+  display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;
+  background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:14px;padding:12px;color:var(--ink);
+  font-family:'Inter';font-size:13.5px;font-weight:600;transition:all .15s;width:100%;
+}
+.node:hover{border-color:var(--cyan);transform:translateY(-2px)}
+.node .ic{font-size:24px}
+.node .st{margin-left:auto;font-size:15px;color:var(--lime)}
+.node.cur{border-color:var(--cyan);box-shadow:0 0 14px rgba(34,211,238,.3)}
+
+/* ---------- cover art ---------- */
+.cover-art{margin:18px 0;border-radius:20px;overflow:hidden;border:1px solid var(--line);background:rgba(0,0,0,.35)}
+.cover-art svg{display:block;width:100%;height:auto}
+@keyframes dash{to{stroke-dashoffset:-40}}
+.flow{stroke-dasharray:8 8;animation:dash 1.6s linear infinite}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.floaty{animation:floaty 4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.pulse{animation:pulse 2s ease-in-out infinite}
+
+/* ---------- misc ---------- */
+.note{font-size:13px;color:var(--mut);line-height:1.6}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:20px 0}
+.center{text-align:center}
+.mt{margin-top:14px}.mb{margin-bottom:14px}
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);z-index:200;
+  background:#0d1533;border:1px solid var(--lime);color:var(--ink);padding:12px 22px;border-radius:14px;
+  font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:all .3s;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.confetti{position:fixed;top:-12px;z-index:300;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.kv{display:flex;gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px dashed rgba(255,255,255,.08);font-size:14.5px}
+.kv b{color:var(--cyan);min-width:110px}
+
+/* ---------- print (LKPD) ---------- */
+@media print{
+  body{background:#fff;color:#111}
+  body::before{display:none}
+  .topbar,.navrow,.noprint,.overlay,.toast{display:none!important}
+  .screen{display:none!important}
+  #screen-lkpd{display:block!important}
+  .card,.qcard{background:#fff!important;border:1px solid #999!important;box-shadow:none!important;color:#111}
+  .card p,.note,label.f{color:#333!important}
+  h1.title,h2.stitle,.display{color:#111!important;-webkit-text-fill-color:#111!important;background:none!important}
+  input.t,textarea.t,select.t{border:1px solid #999!important;color:#111!important;background:#fff!important}
+  .print-val{border-bottom:1px solid #333;min-height:22px;padding:4px 2px;font-size:14px;color:#111;white-space:pre-wrap}
+}
+
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 4px;font-weight:700}
+.frac .nu{border-bottom:2.5px solid var(--cyan);padding:0 8px}
+.frac .de{padding:0 8px}
+.conv{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.conv input{width:80px;text-align:center;font-size:20px;font-weight:700;font-family:'Orbitron';
+  background:rgba(0,0,0,.35);border:1.5px solid var(--line);border-radius:12px;color:var(--ink);padding:10px}
+.conv input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 12px rgba(34,211,238,.3)}
+.convres{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+@media(max-width:560px){.convres{grid-template-columns:1fr}}
+.convbox{background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.convbox .lab{font-size:12px;color:var(--mut);letter-spacing:.08em;font-weight:700}
+.convbox .val{font-family:'Orbitron';font-size:24px;font-weight:800;margin-top:6px;
+  background:linear-gradient(92deg,var(--lime),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+.ratiobar{display:flex;align-items:flex-end;gap:14px;justify-content:center;margin:14px 0;min-height:120px}
+.rbar{width:74px;border-radius:10px 10px 4px 4px;display:flex;align-items:flex-start;justify-content:center;
+  padding-top:10px;font-family:'Orbitron';font-weight:800;color:#04121a;transition:height .6s ease}
+
+table.bedah{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+table.bedah th,table.bedah td{border:1px solid var(--line);padding:9px 10px;text-align:left}
+table.bedah th{background:rgba(34,211,238,.1);color:var(--cyan);width:38%}
+.var-x{font-family:'Orbitron';font-weight:800;font-size:1.15em;color:var(--lime)}
+.miniq{margin:10px 0;padding:12px;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.25)}
+.miniq .opts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.miniq .fb2{display:none;margin-top:8px;font-size:13.5px}
+.miniq .fb2.show{display:block}
+
+.seg{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.seg .btn.on{border-color:var(--lime);color:var(--lime)}
+table.bedah{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+table.bedah th,table.bedah td{border:1px solid var(--line);padding:9px 10px;text-align:left}
+table.bedah th{background:rgba(34,211,238,.1);color:var(--cyan);width:38%}
+table.mini{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+table.mini th,table.mini td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+table.mini th{background:rgba(34,211,238,.08);color:var(--cyan)}
+.labbox{display:flex;gap:26px;align-items:flex-end;justify-content:center;margin:16px 0;flex-wrap:wrap}
+.labrect{border:3px solid;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Orbitron';font-weight:700;min-width:40px;min-height:40px;transition:all .2s}
+input[type=range]{accent-color:var(--cyan);width:160px}
+.verdict{font-family:'Orbitron';font-weight:800;font-size:20px;text-align:center;margin-top:10px}
+.verdict.ok{color:var(--lime)} .verdict.no{color:var(--pink)}
+.gfooter{max-width:1100px;margin:26px auto 44px;padding:18px 16px 0;text-align:center;color:var(--mut);font-size:13px;border-top:1px solid var(--line)}
+.studio{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:12px 0}
+.studio label{font-size:13px;color:var(--mut);display:flex;flex-direction:column;gap:6px}
+.studio input{background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:10px;font-size:16px;width:100%}
+.studio input:focus{outline:none;border-color:var(--cyan)}
+.barsvg{width:100%;max-width:460px;display:block;margin:8px auto}
+.detwrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+@media(max-width:640px){.detwrap{grid-template-columns:1fr}}
+.detcard{border:2px solid var(--line);border-radius:14px;padding:10px;cursor:pointer;background:rgba(0,0,0,.25);transition:border-color .2s}
+.detcard:hover{border-color:var(--cyan)}
+.detcard.right{border-color:var(--lime);box-shadow:0 0 14px rgba(163,230,53,.35)}
+.detcard.wrong{border-color:var(--pink);box-shadow:0 0 14px rgba(244,114,182,.35)}
+.detcard h4{text-align:center;margin:6px 0;font-size:14px}
+.miniq{margin:10px 0;padding:12px;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.25)}
+.miniq .opts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.miniq .fb2{display:none;margin-top:8px;font-size:13.5px}
+.miniq .fb2.show{display:block}
+
+.pow{font-family:'Orbitron';font-weight:800;color:var(--lime)}
+select.t{background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:10px;font-size:15px}
+select.t:focus{outline:none;border-color:var(--cyan)}
+.expansion{font-size:15px;color:var(--mut);word-break:break-all;line-height:1.9}
+.expansion b{color:var(--ink)}
+
+.rad{font-family:'Orbitron';font-weight:800;color:var(--lime)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.tab{padding:10px 16px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.3);color:var(--mut);font-weight:700;cursor:pointer;font-size:14px}
+.tab.on{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 12px rgba(34,211,238,.3)}
+.tabpane{display:none}
+.tabpane.on{display:block;animation:fadein .3s}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="topbar noprint">
+  <div class="inner">
+    <div class="brand"><span class="logo">🛰</span><span class="display">MISI AKAR</span></div>
+    <div class="prog">
+      <span id="progText">Tahap 1 / 14</span>
+      <div class="pbar"><i id="progBar"></i></div>
+    </div>
+    <a class="btn ghost sm" href="https://mpi.gezytech.web.id" style="text-decoration:none">🏠 Portal</a><button class="btn ghost sm" onclick="openMap()">🗺 Peta</button>
+  </div>
+</header>
+
+<div class="overlay" id="mapOverlay" onclick="if(event.target===this)closeMap()">
+  <div class="sheet">
+    <h3 class="display">🗺 PETA MISI</h3>
+    <p class="note">Pilih tahap untuk melompat. Tanda ✓ = sudah dikunjungi.</p>
+    <div class="map-grid" id="mapGrid"></div>
+    <div class="center mt"><button class="btn ghost sm" onclick="closeMap()">Tutup</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="doneOverlay">
+  <div class="sheet center">
+    <div style="font-size:64px">🏆</div>
+    <h2 class="display" style="margin:8px 0">MISI SELESAI!</h2>
+    <p class="lead" style="margin:0 auto 14px">Luar biasa, Penjelajah! Kamu telah menuntaskan seluruh 14 tahap Misi Bentuk Akar.</p>
+    <div id="doneRecap" style="text-align:left"></div>
+    <p class="note mt">Bentuk akar ada di mana-mana: diagonal layar, konstruksi bangunan, sampai fisika! 📐</p>
+    <div class="mt"><button class="btn" onclick="closeDone()">Kembali ke Peta Misi</button></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ============ 1. COVER ============ -->
+<section class="screen" id="screen-cover" data-title="Cover" data-icon="🚀">
+  <div class="stage-head center" style="margin-top:34px">
+    <span class="kicker">Matematika • Kelas 9 • Fase D • Bab 1 • Semester 1</span>
+    <h1 class="title display">MISI<br>BENTUK AKAR</h1>
+    <p class="lead" style="margin:0 auto">Petualangan digital 14 tahap: jinakkan akar yang tak berujung — sederhanakan, operasikan, dan rasionalkan!</p>
+  </div>
+
+  <div class="cover-art">
+    <svg viewBox="0 0 800 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustrasi bentuk akar">
+      <defs>
+        <filter id="glow8" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <g font-family="Orbitron, sans-serif" font-weight="800">
+        <g class="floaty">
+          <text x="330" y="160" text-anchor="middle" font-size="110" fill="#a3e635" filter="url(#glow8)">√</text>
+          <rect x="380" y="80" width="150" height="10" rx="5" fill="#a3e635" filter="url(#glow8)"/>
+          <text x="455" y="160" text-anchor="middle" font-size="72" fill="#fff" filter="url(#glow8)">2</text>
+        </g>
+        <g class="pulse" font-size="20" fill="#a5b4d4" text-anchor="middle" font-weight="700">
+          <text x="620" y="120">√18 = 3√2</text>
+          <text x="620" y="152" fill="#7dd3fc">√50 = 5√2</text>
+          <text x="180" y="120">√12 = 2√3</text>
+          <text x="180" y="152" fill="#f472b6">√75 = 5√3</text>
+        </g>
+        <g font-size="14" fill="#a5b4d4" text-anchor="middle" font-weight="700">
+          <text x="400" y="230">√(a² × b) = a√b — JURUS PENYEDERHANA</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="chiprow" style="justify-content:center">
+    <span class="chip">⏱ 2 × 40 menit</span>
+    <span class="chip">🖥 PID • 📱 HP • 💻 Laptop</span>
+    <span class="chip">🎮 14 tahap misi</span>
+    <span class="chip">🟢🟡🔴 3 level tantangan</span>
+  </div>
+
+  <div class="center" style="margin:26px 0">
+    <button class="btn big" onclick="go('tujuan')">▶ MULAI MISI</button>
+    <p class="note mt">Klik <b>MULAI MISI</b> — atau buka 🗺 Peta untuk melompat ke tahap mana pun.</p>
+  </div>
+</section>
+
+<!-- ============ 2. TUJUAN ============ -->
+<section class="screen" id="screen-tujuan" data-title="Tujuan Pembelajaran" data-icon="🎯">
+  <div class="stage-head">
+    <span class="kicker">Tahap 2 • Tujuan</span>
+    <h2 class="stitle display">🎯 TARGET MISIMU</h2>
+    <p class="lead"><b>Setelah belajar, saya dapat …</b> (sesuai CP Matematika Fase D)</p>
+  </div>
+  <div class="grid2">
+    <div class="card glow"><h3>🔍 1. Mengidentifikasi &amp; Mengubah</h3><p>Mengidentifikasi bentuk akar dan mengubahnya ke bentuk paling sederhana.</p></div>
+    <div class="card glow"><h3>⚡ 2. Menghitung Operasi</h3><p>Menentukan hasil penjumlahan, pengurangan, perkalian, dan pembagian bentuk akar.</p></div>
+    <div class="card glow"><h3>🧹 3. Merasionalkan</h3><p>Merasionalkan penyebut pecahan bentuk akar.</p></div>
+    <div class="card glow"><h3>🌍 4. Memecahkan Masalah</h3><p>Menyelesaikan permasalahan kontekstual yang terkait bentuk akar.</p></div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 3. APERSEPSI ============ -->
+<section class="screen" id="screen-apersepsi" data-title="Apersepsi" data-icon="💡">
+  <div class="stage-head">
+    <span class="kicker">Tahap 3 • Apersepsi</span>
+    <h2 class="stitle display">💡 AKAR DI SEKITARMU</h2>
+    <p class="lead">Akar adalah <b>kebalikan</b> dari pangkat dua — dan ia bersembunyi di benda-benda sekitarmu!</p>
+  </div>
+  <div class="grid2">
+    <div class="card glow"><h3>📐 Diagonal Persegi</h3><p>Persegi dengan sisi 1 cm punya diagonal <b>√2 cm</b> — tak bisa ditulis desimal pas! Inilah bentuk akar.</p></div>
+    <div class="card glow"><h3>📱 Layar HP</h3><p>Layar 6 × 8 cm? Diagonalnya <b>10 cm</b> (√100). Tapi layar 5 × 5 cm? Diagonalnya <b>5√2 cm</b>!</p></div>
+  </div>
+  <h3 class="display mt" style="font-size:16px">❓ PERTANYAAN PEMANTIK <span class="note">(klik untuk arah diskusi)</span></h3>
+  <div class="card pemantik" onclick="this.querySelector('.hint').classList.toggle('show')">
+    <h3>1. √16 = 4 karena 4² = 16. Lalu √20 = …? <span class="tap">👆 klik</span></h3>
+    <div class="hint">💬 <b>Arah diskusi:</b> Tidak ada bilangan bulat yang dikuadratkan = 20! √20 ≈ 4,47… — desimal tak berujung. Inilah <b>bentuk akar</b>: akar yang hasilnya irasional.</div>
+  </div>
+  <div class="card pemantik" onclick="this.querySelector('.hint').classList.toggle('show')">
+    <h3>2. Persegi sisinya 2 cm. Berapa diagonalnya? <span class="tap">👆 klik</span></h3>
+    <div class="hint">💬 <b>Arah diskusi:</b> d = √(2²+2²) = √8 = <b>2√2 cm</b>. Bentuk akar muncul alami dari Pythagoras!</div>
+  </div>
+  <div class="card pemantik" onclick="this.querySelector('.hint').classList.toggle('show')">
+    <h3>3. Kenapa 1/√2 biasanya ditulis √2/2? <span class="tap">👆 klik</span></h3>
+    <div class="hint">💬 <b>Arah diskusi:</b> Karena matematikawan sepakat: <b>penyebut tak boleh memuat akar</b>! Caranya? Dikalikan sekawannya — itulah <b>merasionalkan</b>, misi tahap 7! 🧹</div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 4. ASESMEN AWAL ============ -->
+<section class="screen" id="screen-asesmen-awal" data-title="Asesmen Awal" data-icon="🩺">
+  <div class="stage-head">
+    <span class="kicker">Tahap 4 • Asesmen Awal (Diagnostik)</span>
+    <h2 class="stitle display">🩺 CEK KONDISI AWAL</h2>
+    <p class="lead">Jawab dengan jujur — <b>ini bukan nilai!</b> Hasilnya jadi peta: bagian mana yang sudah kamu kuasai, mana yang perlu dijelajahi.</p>
+  </div>
+  <div id="quizAwal"></div>
+  <div class="center noprint" style="margin:16px 0">
+    <button class="btn" id="cekAwal" onclick="checkQuiz('awal')">✓ CEK JAWABAN</button>
+  </div>
+  <div class="scorebox" id="hasilAwal"></div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 5. MATERI 1 ============ -->
+<section class="screen" id="screen-materi-1" data-title="Materi 1: Mengenal & Menyederhanakan" data-icon="📘">
+  <div class="stage-head">
+    <span class="kicker">Tahap 5 • Materi 1</span>
+    <h2 class="stitle display">📘 BEDAH BENTUK AKAR</h2>
+    <p class="lead"><b>Satu ide:</b> bentuk akar = akar bilangan yang hasilnya <b>irasional</b>. Sederhanakan dengan jurus <span class="rad">√(a²×b) = a√b</span>.</p>
+  </div>
+  <div class="grid3">
+    <div class="card glow"><h3>🔍 Identifikasi</h3><p>√25 = 5 → <b>bukan</b> bentuk akar.<br>√20 ≈ 4,47… → <b>bentuk akar</b> ✅</p></div>
+    <div class="card glow"><h3>✂️ Jurus Sederhana</h3><p>Cari <b>faktor kuadrat terbesar</b>!<br>√18 = √(9×2) = <b>3√2</b></p></div>
+    <div class="card glow"><h3>🎯 Triknya</h3><p>Hafalkan kuadrat: 4, 9, 16,<br>25, 36, 49, 64, 81, 100…</p></div>
+  </div>
+  <div class="card">
+    <h3>⚙️ PENYEDERHANA AKAR <span class="note">— coba sendiri!</span></h3>
+    <p class="note">Ketik bilangan (1–10000), tekan SEDERHANAKAN — lihat faktorisasinya!</p>
+    <div class="conv noprint">
+      <span class="f">√<input id="paN" type="number" value="72" style="width:100px" aria-label="bilangan dalam akar"></span>
+      <button class="btn sm" onclick="sederhanakanAkarUI()">⚡ SEDERHANAKAN</button>
+    </div>
+    <div class="cmpresult" id="paResult"></div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 6. MATERI 2 ============ -->
+<section class="screen" id="screen-materi-2" data-title="Materi 2: Operasi Hitung" data-icon="📗">
+  <div class="stage-head">
+    <span class="kicker">Tahap 6 • Materi 2</span>
+    <h2 class="stitle display">📗 ARENA OPERASI</h2>
+    <p class="lead"><b>Satu ide per tab:</b> tambah-kurang hanya yang <b>sejenis</b>; kali-bagi <b>masukkan ke dalam akar</b>.</p>
+  </div>
+  <div class="tabs noprint" id="opTabs">
+    <button class="tab on" onclick="opTab(0)">➕➖ TAMBAH &amp; KURANG</button>
+    <button class="tab" onclick="opTab(1)">✖️ KALI</button>
+    <button class="tab" onclick="opTab(2)">➗ BAGI</button>
+  </div>
+
+  <div class="tabpane on" id="op0">
+    <div class="card glow">
+      <div class="rule">📌 <b>Jurus:</b> <span class="rad">p√c ± q√c = (p±q)√c</span> — akarnya harus <b>sejenis</b>! Tak sejenis? Sederhanakan dulu.</div>
+      <button class="btn sm ghost noprint" onclick="document.getElementById('st0').classList.toggle('show')">👁 Lihat contoh langkah</button>
+      <ol class="steps" id="st0">
+        <li>1️⃣ <b>3√2 + 5√2</b> = (3+5)√2 = <b>8√2</b></li>
+        <li>2️⃣ <b>√18 + √8</b> = 3√2 + 2√2 = <b>5√2</b> (sederhanakan dulu!)</li>
+      </ol>
+      <div class="conv noprint mt" style="flex-wrap:wrap">
+        <span class="f"><input id="tP" type="number" value="3" style="width:60px" aria-label="p">√<input id="tC" type="number" value="18" style="width:70px" aria-label="c"></span>
+        <select class="t" id="tOp" aria-label="operator"><option value="1">+</option><option value="-1">−</option></select>
+        <span class="f"><input id="tQ" type="number" value="2" style="width:60px" aria-label="q">√<input id="tC2" type="number" value="8" style="width:70px" aria-label="c2"></span>
+        <button class="btn sm" onclick="opTambahKurang()">⚡ HITUNG</button>
+      </div>
+      <div class="cmpresult" id="tResult"></div>
+    </div>
+  </div>
+  <div class="tabpane" id="op1">
+    <div class="card glow">
+      <div class="rule">📌 <b>Jurus:</b> <span class="rad">√a × √b = √(a×b)</span> &nbsp;•&nbsp; <span class="rad">p√a × q√b = pq√(ab)</span> — lalu sederhanakan!</div>
+      <button class="btn sm ghost noprint" onclick="document.getElementById('st1').classList.toggle('show')">👁 Lihat contoh langkah</button>
+      <ol class="steps" id="st1">
+        <li>1️⃣ <b>√3 × √12</b> = √36 = <b>6</b></li>
+        <li>2️⃣ <b>2√3 × 3√2</b> = 6√6</li>
+      </ol>
+      <div class="conv noprint mt" style="flex-wrap:wrap">
+        <span class="f"><input id="kP" type="number" value="2" style="width:60px" aria-label="p">√<input id="kA" type="number" value="3" style="width:70px" aria-label="a"></span>
+        <span class="display" style="color:var(--mut)">×</span>
+        <span class="f"><input id="kQ" type="number" value="3" style="width:60px" aria-label="q">√<input id="kB" type="number" value="2" style="width:70px" aria-label="b"></span>
+        <button class="btn sm" onclick="opKali()">⚡ HITUNG</button>
+      </div>
+      <div class="cmpresult" id="kResult"></div>
+    </div>
+  </div>
+  <div class="tabpane" id="op2">
+    <div class="card glow">
+      <div class="rule">📌 <b>Jurus:</b> <span class="rad">√a ÷ √b = √(a/b)</span> — lalu sederhanakan!</div>
+      <button class="btn sm ghost noprint" onclick="document.getElementById('st2').classList.toggle('show')">👁 Lihat contoh langkah</button>
+      <ol class="steps" id="st2">
+        <li>1️⃣ <b>√18 ÷ √2</b> = √9 = <b>3</b></li>
+        <li>2️⃣ <b>√50 ÷ √2</b> = √25 = <b>5</b></li>
+      </ol>
+      <div class="conv noprint mt" style="flex-wrap:wrap">
+        <span class="f">√<input id="bA" type="number" value="18" style="width:70px" aria-label="a"></span>
+        <span class="display" style="color:var(--mut)">÷</span>
+        <span class="f">√<input id="bB" type="number" value="2" style="width:70px" aria-label="b"></span>
+        <button class="btn sm" onclick="opBagi()">⚡ HITUNG</button>
+      </div>
+      <div class="cmpresult" id="bResult"></div>
+    </div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 7. MATERI 3 ============ -->
+<section class="screen" id="screen-materi-3" data-title="Materi 3: Merasionalkan Penyebut" data-icon="📙">
+  <div class="stage-head">
+    <span class="kicker">Tahap 7 • Materi 3</span>
+    <h2 class="stitle display">📙 OPERASI BERSIH-BERSIH 🧹</h2>
+    <p class="lead"><b>Satu ide:</b> penyebut <b>tak boleh</b> memuat bentuk akar — usir dengan mengalikan <b>sekawannya</b>!</p>
+  </div>
+  <div class="card glow">
+    <div class="rule">📌 <b>Jurus:</b> <span class="rad">p/√q = p√q/q</span> — kalikan pembilang &amp; penyebut dengan √q.</div>
+    <button class="btn sm ghost noprint" onclick="document.getElementById('st3').classList.toggle('show')">👁 Lihat contoh langkah</button>
+    <ol class="steps" id="st3">
+      <li>1️⃣ <b>1/√2</b> = (1×√2)/(√2×√2) = <b>√2/2</b></li>
+      <li>2️⃣ <b>6/√2</b> = 6√2/2 = <b>3√2</b></li>
+      <li>3️⃣ <b>5/√5</b> = 5√5/5 = <b>√5</b></li>
+    </ol>
+  </div>
+  <div class="card">
+    <h3>💡 Kenapa Sih?</h3>
+    <p>√2 ≈ 1,41421356… — desimal tak berujung! Membagi dengan bilangan "tak berujung" itu merepotkan dan tak akurat. Setelah dirasionalkan, akarnya <b>pindah ke pembilang</b> — jauh lebih rapi. ✨</p>
+  </div>
+  <div class="card">
+    <h3>🧹 LAB RASIONALISASI <span class="note">— coba sendiri!</span></h3>
+    <p class="note">Isi pembilang p dan penyebut √q — lihat langkah merasionalkannya!</p>
+    <div class="conv noprint">
+      <span class="f"><input id="rP" type="number" value="6" style="width:70px" aria-label="pembilang"> / √<input id="rQ" type="number" value="2" style="width:70px" aria-label="q"></span>
+      <button class="btn sm" onclick="rasionalkan()">⚡ RASIONALKAN</button>
+    </div>
+    <div class="cmpresult" id="rResult"></div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 8. AKTIVITAS INTERAKTIF ============ -->
+<section class="screen" id="screen-aktivitas" data-title="Aktivitas: Misi Pencocokan" data-icon="🎮">
+  <div class="stage-head">
+    <span class="kicker">Tahap 8 • Aktivitas Interaktif</span>
+    <h2 class="stitle display">🎮 MISI PENCOCOKAN</h2>
+    <p class="lead"><b>Tujuan:</b> menyederhanakan dan mengoperasikan bentuk akar dengan tepat.<br><b>Cara main:</b> ketuk 1 kartu <b>soal</b>, lalu ketuk kartu <b>jawaban</b> yang cocok. Level: 🟢 mudah 🟡 sedang 🔴 menantang.</p>
+  </div>
+  <div class="card">
+    <div class="center"><span class="chip" id="matchProg">0 / 6 pasangan</span> <span class="chip">❌ salah: <b id="matchErr">0</b></span></div>
+    <div class="match-grid">
+      <div class="mcol"><h4>🧩 SOAL</h4><div id="matchQ"></div></div>
+      <div class="mcol"><h4>🎯 JAWABAN</h4><div id="matchA"></div></div>
+    </div>
+    <div class="fb" id="matchDone"></div>
+    <div class="center noprint mt"><button class="btn sm ghost" onclick="initMatch()">🔁 Acak &amp; Ulangi</button></div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 9. LKPD ============ -->
+<section class="screen" id="screen-lkpd" data-title="LKPD Digital" data-icon="📝">
+  <div class="stage-head">
+    <span class="kicker">Tahap 9 • LKPD Digital</span>
+    <h2 class="stitle display">📝 LKPD 08 — BERPETUALANG DENGAN BENTUK AKAR</h2>
+    <p class="lead"><b>Tujuan:</b> (1) menyederhanakan bentuk akar; (2) menemukan pola (√a)² = a.</p>
+  </div>
+  <div class="card">
+    <h3><span class="stepnum">!</span>Petunjuk</h3>
+    <p>1. Isi nama dan kelasmu. &nbsp;2. Kerjakan Aktivitas 1–3 berurutan. &nbsp;3. Diskusikan dengan teman sebangku. &nbsp;4. Klik <b>Cetak LKPD</b> jika ingin dikumpulkan ke guru.</p>
+    <div class="grid2">
+      <div><label class="f">Nama</label><input class="t" id="lkpdNama" placeholder="Nama lengkap"></div>
+      <div><label class="f">Kelas</label><input class="t" id="lkpdKelas" placeholder="cth: IX-A"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="stepnum">1</span>Mengamati — Sederhanakan! ✂️</h3>
+    <p>Gunakan jurus √(a²×b) = a√b!</p>
+    <table class="lkpd">
+      <tr><th>Bentuk akar</th><th>Bentuk sederhana</th></tr>
+      <tr><td><b>√20</b></td><td><input aria-label="sederhana 20"></td></tr>
+      <tr><td><b>√45</b></td><td><input aria-label="sederhana 45"></td></tr>
+      <tr><td><b>√72</b></td><td><input aria-label="sederhana 72"></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3><span class="stepnum">2</span>Mencoba — Operasikan! ⚡</h3>
+    <table class="lkpd">
+      <tr><th>Soal</th><th>Hasil</th></tr>
+      <tr><td><b>2√3 + 5√3</b></td><td><input aria-label="hasil 1"></td></tr>
+      <tr><td><b>√5 × √20</b></td><td><input aria-label="hasil 2"></td></tr>
+      <tr><td><b>√48 ÷ √3</b></td><td><input aria-label="hasil 3"></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3><span class="stepnum">3</span>Menganalisis — Pola Pangkat-Akar ✨</h3>
+    <p>Hitung, lalu temukan polanya!</p>
+    <table class="lkpd">
+      <tr><th>Operasi</th><th>Hasil</th></tr>
+      <tr><td><b>(√5)²</b></td><td><input aria-label="(akar5) kuadrat"></td></tr>
+      <tr><td><b>(2√3)²</b></td><td><input aria-label="(2akar3) kuadrat"></td></tr>
+      <tr><td><b>(√7)²</b></td><td><input aria-label="(akar7) kuadrat"></td></tr>
+    </table>
+    <label class="f">Kesimpulan polamu ((√a)² = …):</label>
+    <textarea class="t" id="lkpdPola" placeholder="Tulis kesimpulanmu dengan bahasamu sendiri…"></textarea>
+    <label class="f">Diskusi: mengapa penyebut bentuk akar harus dirasionalkan? Jelaskan!</label>
+    <textarea class="t" id="lkpdDiskusi" placeholder="Pendapatmu…"></textarea>
+  </div>
+
+  <div class="card">
+    <h3>💎 Kesimpulanku Hari Ini</h3>
+    <textarea class="t" id="lkpdSimpulan" placeholder="Satu hal terpenting yang kupelajari tentang bentuk akar adalah…"></textarea>
+    <div class="center noprint mt">
+      <button class="btn" onclick="printLKPD()">🖨 CETAK LKPD</button>
+      <button class="btn ghost" onclick="copyLKPD()">📋 Salin Jawaban</button>
+    </div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 10. KUIS ============ -->
+<section class="screen" id="screen-kuis" data-title="Kuis Interaktif" data-icon="🏆">
+  <div class="stage-head">
+    <span class="kicker">Tahap 10 • Kuis</span>
+    <h2 class="stitle display">🏆 KUIS KILAT</h2>
+    <p class="lead">8 soal campuran: pilihan ganda, benar/salah, studi kasus, dan HOTS. Level 🟢🟡🔴. Semangat!</p>
+  </div>
+  <div id="quizKuis"></div>
+  <div class="center noprint" style="margin:16px 0">
+    <button class="btn pink" id="cekKuis" onclick="checkQuiz('kuis')">✓ CEK JAWABAN</button>
+  </div>
+  <div class="scorebox" id="hasilKuis"></div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 11. REFLEKSI ============ -->
+<section class="screen" id="screen-refleksi" data-title="Refleksi" data-icon="🪞">
+  <div class="stage-head">
+    <span class="kicker">Tahap 11 • Refleksi</span>
+    <h2 class="stitle display">🪞 CERMIN MISI</h2>
+    <p class="lead">Berhenti sejenak. Pilih emoji yang mewakili perasaanmu, lalu tulis catatanmu.</p>
+  </div>
+  <div class="card">
+    <h3>1. Apa hal baru yang saya pelajari? 🆕</h3>
+    <div class="emo noprint" data-r="r1"><button>😟</button><button>😐</button><button>😊</button><button>🤩</button></div>
+    <textarea class="t mt" id="rt1" placeholder="Hal baru yang kupelajari…"></textarea>
+  </div>
+  <div class="card">
+    <h3>2. Bagian mana yang paling saya pahami? 💪</h3>
+    <div class="emo noprint" data-r="r2"><button>😟</button><button>😐</button><button>😊</button><button>🤩</button></div>
+    <textarea class="t mt" id="rt2" placeholder="Bagian yang paling kupahami…"></textarea>
+  </div>
+  <div class="card">
+    <h3>3. Bagian mana yang masih membingungkan? 🤔</h3>
+    <div class="emo noprint" data-r="r3"><button>😟</button><button>😐</button><button>😊</button><button>🤩</button></div>
+    <textarea class="t mt" id="rt3" placeholder="Bagian yang masih membingungkan…"></textarea>
+  </div>
+  <div class="card">
+    <h3>4. Bagaimana pengetahuan ini berguna dalam hidupku? 🌍</h3>
+    <div class="emo noprint" data-r="r4"><button>😟</button><button>😐</button><button>😊</button><button>🤩</button></div>
+    <textarea class="t mt" id="rt4" placeholder="Contoh: mengukur diagonal, bangun…"></textarea>
+  </div>
+  <div class="center noprint"><button class="btn lime" onclick="saveRefleksi()">💾 SIMPAN REFLEKSI</button></div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 12. ASESMEN AKHIR ============ -->
+<section class="screen" id="screen-asesmen-akhir" data-title="Asesmen Akhir" data-icon="📊">
+  <div class="stage-head">
+    <span class="kicker">Tahap 12 • Asesmen Akhir (Sumatif)</span>
+    <h2 class="stitle display">📊 UJIAN AKHIR MISI</h2>
+    <p class="lead">8 soal penutup: konsep, penerapan, analisis, dan konteks nyata. Tunjukkan kemampuan terbaikmu!</p>
+  </div>
+  <div id="quizAkhir"></div>
+  <div class="center noprint" style="margin:16px 0">
+    <button class="btn pink" id="cekAkhir" onclick="checkQuiz('akhir')">✓ CEK JAWABAN</button>
+  </div>
+  <div class="scorebox" id="hasilAkhir"></div>
+  <details class="guru">
+    <summary>🔑 Kunci Jawaban &amp; Pedoman Penilaian (Guru)</summary>
+    <div class="kunci">
+      <b>Kunci:</b> 1-A (6) &nbsp;2-Benar &nbsp;3-A (4√5) &nbsp;4-A (3√7) &nbsp;5-A (6√6) &nbsp;6-A (√5) &nbsp;7-A (11) &nbsp;8-Salah<br><br>
+      <b>Pedoman penilaian:</b> Nilai = (jawaban benar ÷ 8) × 100.<br>
+      • 90–100 : Sangat Baik — siap lanjut materi berikutnya<br>
+      • 75–89 &nbsp;: Baik — mantap, sedikit penguatan<br>
+      • 60–74 &nbsp;: Cukup — perlu bimbingan pada soal yang salah<br>
+      • &lt; 60 &nbsp;&nbsp;: Perlu pembelajaran remedial terbimbing (bukan sekadar mengulang tes)
+    </div>
+  </details>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 13. KESIMPULAN ============ -->
+<section class="screen" id="screen-kesimpulan" data-title="Kesimpulan" data-icon="💎">
+  <div class="stage-head">
+    <span class="kicker">Tahap 13 • Kesimpulan</span>
+    <h2 class="stitle display">💎 INTI MISIMU</h2>
+    <p class="lead">Tiga hal yang wajib menempel di kepalamu setelah misi ini:</p>
+  </div>
+  <div class="grid3">
+    <div class="card glow"><h3>✂️ Sederhanakan</h3><p><span class="rad">√(a²×b) = a√b</span><br>Cari faktor kuadrat terbesar.<br>cth: √72 = 6√2.</p></div>
+    <div class="card glow"><h3>⚡ Operasikan</h3><p>± : <b>sejenis</b> saja.<br>× : <span class="rad">√a×√b = √(ab)</span>.<br>÷ : <span class="rad">√a÷√b = √(a/b)</span>.</p></div>
+    <div class="card glow"><h3>🧹 Rasionalkan</h3><p><span class="rad">p/√q = p√q/q</span>.<br>Penyebut bersih<br>dari akar! ✨</p></div>
+  </div>
+  <div class="card">
+    <h3>📣 Pesan Misi</h3>
+    <p style="font-size:16px;color:var(--ink)">"Bentuk akar mengajarkan kita: yang tak berujung pun bisa dijinakkan — asal tahu jurusnya."</p>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 14. PENUTUP ============ -->
+<section class="screen" id="screen-penutup" data-title="Penutup" data-icon="🏁">
+  <div class="stage-head center" style="margin-top:30px">
+    <div style="font-size:70px">🏁</div>
+    <span class="kicker">Tahap 14 • Penutup</span>
+    <h2 class="stitle display">MISI SELESAI, PENJELAJAH!</h2>
+    <p class="lead" style="margin:0 auto">Kamu sudah menaklukkan bentuk akar! Sekarang sederhanakan, operasikan, dan rasionalkan — semuanya bisa! 💪</p>
+  </div>
+  <div class="card glow center">
+    <h3>🌟 Tantangan Terakhir</h3>
+    <p>Ukur <b>diagonal 3 benda persegi/persegi panjang</b> di rumahmu (buku, HP, meja)! Nyatakan hasilnya dalam bentuk akar paling sederhana! 📐</p>
+  </div>
+  <div class="center" style="margin:24px 0;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <button class="btn ghost big" onclick="ulangi()">🔁 ULANGI</button>
+    <button class="btn lime big" onclick="selesai()">✓ SELESAI</button>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn ghost" onclick="openMap()">🗺 PETA MISI</button></div>
+</section>
+
+</div><!-- /wrap -->
+<footer class="gfooter">@2026 Gezytech Platform MPI. Dikembangkan oleh PakGun</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= NAVIGASI ================= */
+const ORDER=['cover','tujuan','apersepsi','asesmen-awal','materi-1','materi-2','materi-3','aktivitas','lkpd','kuis','refleksi','asesmen-akhir','kesimpulan','penutup'];
+let cur=0; const visited=new Set();
+const state={scores:{awal:null,kuis:null,akhir:null},matchBest:null};
+
+function go(id){
+  const i=ORDER.indexOf(id); if(i<0)return;
+  cur=i; visited.add(id);
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  document.getElementById('progText').textContent='Tahap '+(i+1)+' / '+ORDER.length;
+  document.getElementById('progBar').style.width=((i+1)/ORDER.length*100)+'%';
+  buildMap(); window.scrollTo({top:0,behavior:'smooth'});
+}
+function next(){ if(cur<ORDER.length-1) go(ORDER[cur+1]); }
+function back(){ if(cur>0) go(ORDER[cur-1]); }
+
+function buildMap(){
+  const g=document.getElementById('mapGrid'); g.innerHTML='';
+  ORDER.forEach((id,i)=>{
+    const s=document.getElementById('screen-'+id);
+    const b=document.createElement('button');
+    b.className='node'+(id===ORDER[cur]?' cur':'');
+    b.innerHTML='<span class="ic">'+s.dataset.icon+'</span><span>'+(i+1)+'. '+s.dataset.title+'</span><span class="st">'+(visited.has(id)?'✓':'')+'</span>';
+    b.onclick=()=>{closeMap();go(id);};
+    g.appendChild(b);
+  });
+}
+function openMap(){buildMap();document.getElementById('mapOverlay').classList.add('show');}
+function closeMap(){document.getElementById('mapOverlay').classList.remove('show');}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2200);}
+
+/* ================= HELPER AKAR ================= */
+function gcd(a,b){a=Math.abs(Math.round(a));b=Math.abs(Math.round(b));while(b){const t=a%b;a=b;b=t;}return a||1;}
+function simpAkar(n){
+  let k=1,r=Math.round(n);
+  for(let d=2;d*d<=r;d++){while(r%(d*d)===0){r/=d*d;k*=d;}}
+  return {k:k,r:r};
+}
+function fmtAkar(k,r){
+  if(r===1)return String(k);
+  if(k===1)return '√'+r;
+  if(k===-1)return '−√'+r;
+  return k+'√'+r;
+}
+
+/* ================= PENYEDERHANA AKAR ================= */
+function sederhanakanAkarUI(){
+  const n=parseFloat(document.getElementById('paN').value);
+  const box=document.getElementById('paResult');
+  if(isNaN(n)||!Number.isInteger(n)||n<1||n>10000){toast('Isi bilangan bulat 1–10000!');return;}
+  const s=simpAkar(n), sq=s.k*s.k;
+  if(s.r===1){
+    box.innerHTML='<div class="bigexpr">√'+n+' = '+s.k+'</div><p class="note center">Hasilnya bilangan bulat — <b>bukan</b> bentuk akar!</p>';
+  }else if(s.k===1){
+    box.innerHTML='<div class="bigexpr">√'+n+' = √'+n+'</div><p class="note center">Sudah paling sederhana! ✅</p>';
+  }else{
+    box.innerHTML='<div class="bigexpr">√'+n+' = '+fmtAkar(s.k,s.r)+'</div>'
+      +'<p class="note center">Langkah: '+n+' = '+sq+' × '+s.r+' → √'+n+' = √'+sq+' × √'+s.r+' = <b>'+fmtAkar(s.k,s.r)+'</b></p>';
+  }
+  box.classList.add('show');
+}
+
+/* ================= LAB OPERASI ================= */
+function opTab(i){
+  const tabs=document.querySelectorAll('#opTabs .tab');
+  tabs.forEach((t,j)=>t.classList.toggle('on',j===i));
+  for(let k=0;k<tabs.length;k++)document.getElementById('op'+k).classList.toggle('on',k===i);
+}
+function opTambahKurang(){
+  const p=parseFloat(document.getElementById('tP').value);
+  const c=parseFloat(document.getElementById('tC').value);
+  const sgn=parseFloat(document.getElementById('tOp').value);
+  const q=parseFloat(document.getElementById('tQ').value);
+  const c2=parseFloat(document.getElementById('tC2').value);
+  const box=document.getElementById('tResult');
+  if([p,c,q,c2].some(v=>isNaN(v)||!Number.isInteger(v)||v<0)||c<1||c2<1){toast('Isi koefisien & bilangan dalam akar (bulat ≥ 0, akar ≥ 1)!');return;}
+  const s1=simpAkar(c), s2=simpAkar(c2);
+  const P=p*s1.k, Q=sgn*q*s2.k;
+  const opStr=sgn>0?'+':'−';
+  const soal=fmtAkar(p,c)+' '+opStr+' '+fmtAkar(q,c2);
+  let html;
+  if(s1.r===s2.r){
+    const T=P+Q;
+    html='<div class="bigexpr">'+soal+' = '+fmtAkar(T,s1.r)+'</div>'
+      +'<p class="note center">Sederhanakan dulu: '+fmtAkar(p,c)+'='+fmtAkar(P,s1.r)+', '+fmtAkar(q,c2)+'='+fmtAkar(Q,s2.r)
+      +'<br>Sejenis! ('+P+(sgn>0?'+':'−')+Math.abs(Q)+')√'+s1.r+' = <b>'+fmtAkar(T,s1.r)+'</b></p>';
+  }else{
+    html='<div class="bigexpr">'+soal+' = '+fmtAkar(P,s1.r)+' '+opStr+' '+fmtAkar(Math.abs(Q),s2.r)+'</div>'
+      +'<p class="note center">Setelah disederhanakan akarnya <b>tak sejenis</b> (√'+s1.r+' vs √'+s2.r+') → tidak bisa digabung!</p>';
+  }
+  box.innerHTML=html; box.classList.add('show');
+}
+function opKali(){
+  const p=parseFloat(document.getElementById('kP').value);
+  const a=parseFloat(document.getElementById('kA').value);
+  const q=parseFloat(document.getElementById('kQ').value);
+  const b=parseFloat(document.getElementById('kB').value);
+  const box=document.getElementById('kResult');
+  if([p,a,q,b].some(v=>isNaN(v)||!Number.isInteger(v)||v<0)||a<1||b<1){toast('Isi dengan bilangan bulat ≥ 0 (akar ≥ 1)!');return;}
+  const s=simpAkar(a*b), T=p*q*s.k;
+  box.innerHTML='<div class="bigexpr">'+fmtAkar(p,a)+' × '+fmtAkar(q,b)+' = '+fmtAkar(T,s.r)+'</div>'
+    +'<p class="note center">Langkah: '+p*q+'√('+a+'×'+b+') = '+p*q+'√'+(a*b)+' = <b>'+fmtAkar(T,s.r)+'</b></p>';
+  box.classList.add('show');
+}
+function opBagi(){
+  const a=parseFloat(document.getElementById('bA').value);
+  const b=parseFloat(document.getElementById('bB').value);
+  const box=document.getElementById('bResult');
+  if([a,b].some(v=>isNaN(v)||!Number.isInteger(v))||a<1||b<1){toast('Isi a, b bilangan bulat ≥ 1!');return;}
+  const g=gcd(a,b), na=a/g, nb=b/g;
+  let html;
+  if(nb===1){
+    const s=simpAkar(na);
+    html='<div class="bigexpr">√'+a+' ÷ √'+b+' = '+fmtAkar(s.k,s.r)+'</div>'
+      +'<p class="note center">√('+a+'/'+b+') = √'+na+' = <b>'+fmtAkar(s.k,s.r)+'</b></p>';
+  }else{
+    html='<div class="bigexpr">√'+a+' ÷ √'+b+' = √('+na+'/'+nb+')</div>'
+      +'<p class="note center">√('+a+'/'+b+') disederhanakan jadi <b>√('+na+'/'+nb+')</b> (bagi dengan FPB '+g+')</p>';
+  }
+  box.innerHTML=html; box.classList.add('show');
+}
+
+/* ================= LAB RASIONALISASI ================= */
+function rasionalkan(){
+  const p=parseFloat(document.getElementById('rP').value);
+  const q=parseFloat(document.getElementById('rQ').value);
+  const box=document.getElementById('rResult');
+  if([p,q].some(v=>isNaN(v)||!Number.isInteger(v))||q<1){toast('Isi p bulat dan q bulat ≥ 1!');return;}
+  if(p===0){box.innerHTML='<div class="bigexpr">0</div>';box.classList.add('show');return;}
+  const g=gcd(p,q), np=p/g, nq=q/g;
+  let hasil;
+  if(nq===1){hasil=fmtAkar(np,q);}
+  else{hasil=(np===1?'':np=== -1?'−':np)+'√'+q+'/'+nq;}
+  box.innerHTML='<div class="bigexpr">'+p+'/√'+q+' = '+hasil+'</div>'
+    +'<p class="note center">Langkah: ('+p+'×√'+q+')/(√'+q+'×√'+q+') = '+p+'√'+q+'/'+q
+    +(g>1?' = <b>'+hasil+'</b> (bagi FPB '+g+')':' = <b>'+hasil+'</b>')+'</p>';
+  box.classList.add('show');
+}
+</script>
+
+<script>
+/* ================= BANK SOAL ================= */
+const Q={
+awal:{mount:'quizAwal',btn:'cekAwal',out:'hasilAwal',mode:'diag',qs:[
+ {t:'pg',tag:'🟢',q:'√25 = …',o:['5','25','125','50'],a:0,fb:'5² = 25, jadi √25 = <b>5</b>.'},
+ {t:'bs',tag:'🟢',q:'"√9 = 3."',o:['Benar','Salah'],a:0,fb:'<b>Benar.</b> 3² = 9.'},
+ {t:'pg',tag:'🟡',q:'Bentuk sederhana dari √18 adalah …',o:['3√2','9√2','2√3','6'],a:0,fb:'18 = 9 × 2 → <b>3√2</b>.'},
+ {t:'pg',tag:'🟡',q:'√4 × √9 = …',o:['6','36','13','5'],a:0,fb:'2 × 3 = <b>6</b>.'}
+]},
+kuis:{mount:'quizKuis',btn:'cekKuis',out:'hasilKuis',mode:'stars',qs:[
+ {t:'pg',tag:'🟢',q:'√49 = …',o:['7','49','14','98'],a:0,fb:'7² = 49, jadi √49 = <b>7</b>.'},
+ {t:'bs',tag:'🟢',q:'"√16 = 4."',o:['Benar','Salah'],a:0,fb:'<b>Benar.</b> 4² = 16.'},
+ {t:'pg',tag:'🟡',q:'Bentuk sederhana dari √24 adalah …',o:['2√6','4√6','12√2','6'],a:0,fb:'24 = 4 × 6 → <b>2√6</b>.'},
+ {t:'pg',tag:'🟡',q:'4√3 + 2√3 = …',o:['6√3','6√6','8√3','12'],a:0,fb:'(4+2)√3 = <b>6√3</b>.'},
+ {t:'bs',tag:'🟡',q:'"√2 × √8 = 4."',o:['Benar','Salah'],a:0,fb:'<b>Benar.</b> √16 = 4.'},
+ {t:'pg',tag:'🔴',q:'Bentuk rasional dari 6/√2 adalah …',o:['3√2','6√2','√2/6','3'],a:0,fb:'6√2/2 = <b>3√2</b>.'},
+ {t:'pg',tag:'🔴',q:'√27 − √12 = …',o:['√3','3√3','15','√15'],a:0,fb:'3√3 − 2√3 = <b>√3</b>.'},
+ {t:'pg',tag:'🟡',q:'√50 ÷ √2 = …',o:['5','25','5√2','10'],a:0,fb:'√(50/2) = √25 = <b>5</b>.'}
+]},
+akhir:{mount:'quizAkhir',btn:'cekAkhir',out:'hasilAkhir',mode:'nilai',qs:[
+ {t:'pg',tag:'🟢',q:'√36 = …',o:['6','18','12','36'],a:0,fb:'6² = 36, jadi √36 = <b>6</b>.'},
+ {t:'bs',tag:'🟢',q:'"Bentuk akar adalah akar dari bilangan rasional yang hasilnya irasional."',o:['Benar','Salah'],a:0,fb:'<b>Benar.</b> Itulah definisi bentuk akar.'},
+ {t:'pg',tag:'🟡',q:'Bentuk sederhana dari √80 adalah …',o:['4√5','8√5','16√5','2√20'],a:0,fb:'80 = 16 × 5 → <b>4√5</b>.'},
+ {t:'pg',tag:'🟡',q:'5√7 − 2√7 = …',o:['3√7','3√14','7√7','10'],a:0,fb:'(5−2)√7 = <b>3√7</b>.'},
+ {t:'pg',tag:'🟡',q:'3√2 × 2√3 = …',o:['6√6','5√5','6√5','12'],a:0,fb:'(3×2)√(2×3) = 6√6.'},
+ {t:'pg',tag:'🔴',q:'Bentuk rasional dari 5/√5 adalah …',o:['√5','5√5','1','25'],a:0,fb:'5√5/5 = <b>√5</b>.'},
+ {t:'pg',tag:'🔴',q:'(√6)² + √25 = …',o:['11','6√25','31','√61'],a:0,fb:'6 + 5 = <b>11</b>.'},
+ {t:'bs',tag:'🟡',q:'"√3 + √2 = √5."',o:['Benar','Salah'],a:1,fb:'<b>Salah.</b> Tak sejenis — tidak bisa digabung!'}
+]}};
+const sel={awal:[],kuis:[],akhir:[]};
+const done={awal:false,kuis:false,akhir:false};
+
+function renderQuiz(key){
+  const cfg=Q[key],box=document.getElementById(cfg.mount);
+  sel[key]=cfg.qs.map(()=>null); done[key]=false;
+  document.getElementById(cfg.out).classList.remove('show');
+  const btn=document.getElementById(cfg.btn);
+  btn.disabled=false; btn.innerHTML='✓ CEK JAWABAN';
+  btn.onclick=()=>checkQuiz(key);
+  box.innerHTML=cfg.qs.map((q,qi)=>{
+    const opts=q.o.map((op,oi)=>{
+      const k=q.t==='pg'?String.fromCharCode(65+oi):'';
+      return '<button class="opt" data-qi="'+qi+'" data-oi="'+oi+'" onclick="pickOpt(\''+key+'\','+qi+','+oi+')"><span class="k">'+k+'</span>'+op+'</button>';
+    }).join('');
+    return '<div class="qcard"><div class="qhead"><span class="qnum">'+(qi+1)+'</span><span class="qtag">'+q.tag+'</span><div class="qtext">'+q.q+'</div></div>'
+      +'<div class="opts">'+opts+'</div><div class="fb" id="fb-'+key+'-'+qi+'"></div></div>';
+  }).join('');
+}
+function pickOpt(key,qi,oi){
+  if(done[key])return;
+  sel[key][qi]=oi;
+  document.querySelectorAll('#'+Q[key].mount+' .opt[data-qi="'+qi+'"]').forEach(b=>{
+    b.classList.toggle('picked',+b.dataset.oi===oi);
+  });
+}
+function checkQuiz(key){
+  const cfg=Q[key],n=cfg.qs.length;
+  let benar=0;
+  cfg.qs.forEach((q,qi)=>{
+    const chosen=sel[key][qi];
+    const btns=[...document.querySelectorAll('#'+cfg.mount+' .opt[data-qi="'+qi+'"]')];
+    btns.forEach(b=>{b.disabled=true;b.classList.remove('picked');});
+    if(chosen===q.a){
+      benar++;
+      btns[q.a].classList.add('correct');
+      btns.forEach((b,oi)=>{if(oi!==q.a)b.classList.add('dim');});
+    }else{
+      btns[q.a].classList.add('correct');
+      if(chosen!==null&&chosen!==undefined)btns[chosen].classList.add('wrong');
+      btns.forEach((b,oi)=>{if(oi!==q.a&&oi!==chosen)b.classList.add('dim');});
+    }
+    const f=document.getElementById('fb-'+key+'-'+qi);
+    f.innerHTML=(chosen===q.a?'✅ <b>Betul!</b> ':'❌ <b>Kurang tepat.</b> ')+q.fb;
+    f.classList.add('show');
+  });
+  done[key]=true;
+  const nilai=Math.round(benar/n*100);
+  state.scores[key]=benar;
+  const out=document.getElementById(cfg.out);
+  let extra='';
+  if(cfg.mode==='diag'){
+    extra=benar===n?'🟢 <b>Fondasimu kuat!</b> Tinggal pertajam di materi.':(benar>=2?'🟡 <b>Bagus!</b> Perhatikan materi yang berkaitan dengan soal yang salah.':'🔵 <b>Santai</b> — misi ini dirancang membantumu dari nol. Ikuti tiap tahap!');
+  }else if(cfg.mode==='stars'){
+    const st=benar>=7?'⭐⭐⭐':benar>=5?'⭐⭐':benar>=3?'⭐':'';
+    extra=(st?'<div class="stars">'+st+'</div>':'')+(benar>=7?'🏅 <b>Master Akar!</b> Luar biasa!':benar>=5?'💪 <b>Hebat!</b> Sedikit lagi sempurna.':benar>=3?'👍 <b>Bagus</b>, terus berlatih!':'🔁 <b>Jangan menyerah</b> — ulangi materinya, lalu coba lagi!');
+  }else{
+    extra='Nilai: <b>'+nilai+'</b> — '+(nilai>=90?'Sangat Baik 🌟':nilai>=75?'Baik ✅':nilai>=60?'Cukup 📝':'Perlu bimbingan 💬');
+  }
+  out.innerHTML='<div class="big">'+benar+' / '+n+'</div><div class="mt">'+extra+'</div>';
+  out.classList.add('show');
+  const btn=document.getElementById(cfg.btn);
+  btn.innerHTML='🔁 ULANGI'; btn.onclick=()=>renderQuiz(key);
+  out.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+/* ================= MISI PENCOCOKAN ================= */
+const PAIRS=[
+ {q:'√50',a:'5√2',tag:'🟢'},
+ {q:'√12',a:'2√3',tag:'🟢'},
+ {q:'3√5 + 2√5',a:'5√5',tag:'🟡'},
+ {q:'√8 × √2',a:'4',tag:'🟡'},
+ {q:'1/√3',a:'√3/3',tag:'🔴'},
+ {q:'√75 − √12',a:'3√3',tag:'🔴'}
+];
+let mQ=null,mA=null,mFound=0,mErr=0;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function initMatch(){
+  mQ=null;mA=null;mFound=0;mErr=0;
+  document.getElementById('matchErr').textContent='0';
+  document.getElementById('matchProg').textContent='0 / '+PAIRS.length+' pasangan';
+  document.getElementById('matchDone').classList.remove('show');
+  const qi=shuffle(PAIRS.map((_,i)=>i)), ai=shuffle(PAIRS.map((_,i)=>i));
+  document.getElementById('matchQ').innerHTML=qi.map(i=>'<button class="mcard" data-i="'+i+'" onclick="pickM(\'q\','+i+',this)">'+PAIRS[i].q+'<span class="tag">'+PAIRS[i].tag+'</span></button>').join('');
+  document.getElementById('matchA').innerHTML=ai.map(i=>'<button class="mcard" data-i="'+i+'" onclick="pickM(\'a\','+i+',this)">'+PAIRS[i].a+'<span class="tag">'+PAIRS[i].tag+'</span></button>').join('');
+}
+function pickM(which,i,btn){
+  if(btn.classList.contains('done'))return;
+  if(which==='q'){mQ={i,btn};document.querySelectorAll('#matchQ .mcard').forEach(b=>b.classList.remove('sel'));}
+  else{mA={i,btn};document.querySelectorAll('#matchA .mcard').forEach(b=>b.classList.remove('sel'));}
+  btn.classList.add('sel');
+  if(mQ&&mA){
+    if(mQ.i===mA.i){
+      mQ.btn.classList.add('done');mA.btn.classList.add('done');
+      mQ.btn.disabled=mA.btn.disabled=true;
+      mQ=null;mA=null;mFound++;
+      document.getElementById('matchProg').textContent=mFound+' / '+PAIRS.length+' pasangan';
+      if(mFound===PAIRS.length){
+        const d=document.getElementById('matchDone');
+        d.innerHTML='🎉 <b>MISI TUNTAS!</b> Semua '+PAIRS.length+' pasangan cocok'+(mErr===0?' <b>tanpa satu pun kesalahan</b> — sempurna! 🌟':' dengan '+mErr+' kesalahan. '+(mErr<=2?'Hebat, hampir sempurna! 💪':'Coba lagi untuk hasil sempurna! 🔁'));
+        d.classList.add('show');
+        if(state.matchBest===null||mErr<state.matchBest)state.matchBest=mErr;
+        d.scrollIntoView({behavior:'smooth',block:'center'});
+      }
+    }else{
+      mErr++;document.getElementById('matchErr').textContent=mErr;
+      const b1=mQ.btn,b2=mA.btn;
+      b1.classList.add('err');b2.classList.add('err');
+      mQ=null;mA=null;
+      setTimeout(()=>{b1.classList.remove('err','sel');b2.classList.remove('err','sel');},500);
+    }
+  }
+}
+
+/* ================= LKPD ================= */
+let _lkpdBackup=[];
+function printLKPD(){
+  document.body.classList.add('print-lkpd');
+  _lkpdBackup=[];
+  document.querySelectorAll('#screen-lkpd input,#screen-lkpd textarea,#screen-lkpd select').forEach(f=>{
+    const v=f.value||'';
+    const s=document.createElement('div');s.className='print-val';s.textContent=v;
+    f.parentNode.insertBefore(s,f);f.style.display='none';
+    _lkpdBackup.push({f,s});
+  });
+  window.print();
+}
+window.onafterprint=()=>{
+  document.body.classList.remove('print-lkpd');
+  _lkpdBackup.forEach(({f,s})=>{s.remove();f.style.display='';});
+  _lkpdBackup=[];
+};
+function copyLKPD(){
+  const g=id=>document.getElementById(id).value||'-';
+  const rows=[...document.querySelectorAll('#screen-lkpd table.lkpd input')].map(i=>i.value||'-');
+  const txt='LKPD 08 — Bentuk Akar\nNama: '+g('lkpdNama')+' | Kelas: '+g('lkpdKelas')
+    +'\n\nA1. √20='+rows[0]+' | √45='+rows[1]+' | √72='+rows[2]
+    +'\nA2. 2√3+5√3='+rows[3]+' | √5×√20='+rows[4]+' | √48÷√3='+rows[5]
+    +'\nA3. (√5)²='+rows[6]+' | (2√3)²='+rows[7]+' | (√7)²='+rows[8]
+    +'\nA3. Kesimpulan: '+g('lkpdPola')
+    +'\nDiskusi: '+g('lkpdDiskusi')
+    +'\nKesimpulan: '+g('lkpdSimpulan');
+  const done2=()=>toast('📋 Jawaban LKPD disalin!');
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done2).catch(()=>fallbackCopy(txt,done2));}
+  else fallbackCopy(txt,done2);
+}
+function fallbackCopy(txt,cb){
+  const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);
+  ta.select();try{document.execCommand('copy');}catch(e){}ta.remove();cb();
+}
+
+/* ================= REFLEKSI ================= */
+const emoSel={};
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.emo button');if(!b)return;
+  const wrap=b.parentElement;
+  wrap.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');emoSel[wrap.dataset.r]=b.textContent;
+});
+function saveRefleksi(){
+  const data={r1:{e:emoSel.r1||'',t:document.getElementById('rt1').value},
+              r2:{e:emoSel.r2||'',t:document.getElementById('rt2').value},
+              r3:{e:emoSel.r3||'',t:document.getElementById('rt3').value},
+              r4:{e:emoSel.r4||'',t:document.getElementById('rt4').value}};
+  try{localStorage.setItem('misiAkar_refleksi',JSON.stringify(data));}catch(e){}
+  toast('💾 Refleksi tersimpan di perangkat ini!');
+}
+function loadRefleksi(){
+  try{
+    const d=JSON.parse(localStorage.getItem('misiAkar_refleksi')||'null');if(!d)return;
+    ['r1','r2','r3','r4'].forEach((k,i)=>{
+      document.getElementById('rt'+(i+1)).value=d[k].t||'';
+      if(d[k].e){document.querySelector('.emo[data-r="'+k+'"]').querySelectorAll('button').forEach(b=>{if(b.textContent===d[k].e){b.classList.add('on');emoSel[k]=d[k].e;}});}
+    });
+  }catch(e){}
+}
+
+/* ================= SELESAI / ULANGI ================= */
+function selesai(){
+  const s=state.scores;
+  const fmt=(v,n)=>v===null?'—':v+'/'+n;
+  document.getElementById('doneRecap').innerHTML=
+    '<div class="kv"><b>🩺 Asesmen Awal</b><span>'+fmt(s.awal,4)+'</span></div>'
+   +'<div class="kv"><b>🏆 Kuis Kilat</b><span>'+fmt(s.kuis,8)+'</span></div>'
+   +'<div class="kv"><b>📊 Asesmen Akhir</b><span>'+fmt(s.akhir,8)+'</span></div>'
+   +'<div class="kv"><b>🎮 Pencocokan</b><span>'+(state.matchBest===null?'—':'terbaik: '+state.matchBest+' salah')+'</span></div>';
+  document.getElementById('doneOverlay').classList.add('show');
+  confetti();
+}
+function closeDone(){document.getElementById('doneOverlay').classList.remove('show');openMap();}
+function ulangi(){
+  ['awal','kuis','akhir'].forEach(renderQuiz);
+  initMatch();
+  state.scores={awal:null,kuis:null,akhir:null};state.matchBest=null;
+  go('cover');toast('🔁 Misi dimulai ulang dari awal!');
+}
+function confetti(){
+  const colors=['#22d3ee','#f472b6','#a3e635','#fbbf24','#fff'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');c.className='confetti';
+    c.style.left=Math.random()*100+'vw';
+    c.style.background=colors[i%colors.length];
+    const sz=6+Math.random()*8;
+    c.style.width=sz+'px';c.style.height=sz*(Math.random()>.5?1:.4)+'px';
+    c.style.animationDuration=(2.2+Math.random()*2)+'s';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4500);
+  }
+}
+
+/* ================= INIT ================= */
+document.addEventListener('DOMContentLoaded',()=>{
+  renderQuiz('awal');renderQuiz('kuis');renderQuiz('akhir');
+  initMatch();loadRefleksi();sederhanakanAkarUI();
+  go('cover');
+});
+</script>
+</body>
+</html>
