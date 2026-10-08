@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MISI FUNGSI KUADRAT — Petualangan Digital Matematika Kelas 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b1f; --bg2:#0b1030;
+  --cyan:#22d3ee; --cyan-d:#0e7490;
+  --mag:#f472b6; --mag-d:#be185d;
+  --lime:#a3e635; --amber:#fbbf24; --red:#fb7185;
+  --ink:#eef2ff; --mut:#a5b4d4;
+  --card:rgba(17,24,58,.72); --line:rgba(34,211,238,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  color:var(--ink); min-height:100vh;
+  background:
+    radial-gradient(900px 500px at 15% -5%, rgba(34,211,238,.14), transparent 60%),
+    radial-gradient(800px 500px at 90% 10%, rgba(244,114,182,.12), transparent 60%),
+    radial-gradient(700px 600px at 50% 110%, rgba(163,230,53,.07), transparent 60%),
+    var(--bg);
+}
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+  background-image:
+    linear-gradient(rgba(34,211,238,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34,211,238,.05) 1px, transparent 1px);
+  background-size:44px 44px;
+  mask-image:radial-gradient(ellipse at 50% 0%, black 30%, transparent 90%);
+}
+.display{font-family:'Orbitron','Inter',sans-serif; letter-spacing:.04em}
+.wrap{max-width:960px;margin:0 auto;padding:0 18px 40px;position:relative;z-index:1}
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(7,11,31,.82);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.topbar .inner{max-width:960px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px}
+.brand .logo{
+  width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:20px;
+  background:linear-gradient(135deg,var(--cyan),var(--mag));
+  box-shadow:0 0 18px rgba(34,211,238,.55);
+}
+.prog{margin-left:auto;font-size:12.5px;color:var(--mut);white-space:nowrap}
+.pbar{height:6px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin-top:4px;min-width:110px}
+.pbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--lime));border-radius:99px;transition:width .5s}
+
+/* ---------- screens ---------- */
+.screen{display:none}
+.screen.active{display:block;animation:fadeUp .45s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.stage-head{margin:26px 0 18px}
+.kicker{
+  display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.14em;
+  color:var(--cyan);text-transform:uppercase;margin-bottom:10px;
+  border:1px solid var(--line);padding:6px 12px;border-radius:99px;background:rgba(34,211,238,.07);
+}
+h1.title{font-size:clamp(26px,5vw,44px);line-height:1.15;margin:6px 0 10px;
+  background:linear-gradient(92deg,#fff 20%,var(--cyan) 55%,var(--mag) 90%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+h2.stitle{font-size:clamp(21px,4vw,30px);margin:6px 0 8px}
+.lead{color:var(--mut);font-size:15.5px;line-height:1.65;max-width:640px}
+.lead b{color:var(--ink)}
+
+/* ---------- cards & buttons ---------- */
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:20px;margin:14px 0;backdrop-filter:blur(8px);
+  box-shadow:0 8px 30px rgba(0,0,0,.35);
+}
+.card.glow{border-color:rgba(34,211,238,.45);box-shadow:0 0 26px rgba(34,211,238,.14),0 8px 30px rgba(0,0,0,.35)}
+.card h3{font-size:17px;margin-bottom:8px}
+.card p{color:var(--mut);font-size:14.5px;line-height:1.65}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr}}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:99px;border:1px solid var(--line);color:var(--mut);background:rgba(255,255,255,.03)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:15px;cursor:pointer;border:none;
+  padding:13px 26px;border-radius:14px;color:#04121a;text-decoration:none;
+  background:linear-gradient(135deg,var(--cyan),#7dd3fc);
+  box-shadow:0 6px 22px rgba(34,211,238,.35);transition:transform .15s, box-shadow .15s;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(34,211,238,.5)}
+.btn:active{transform:translateY(0)}
+.btn.big{font-size:17px;padding:16px 44px;border-radius:16px}
+.btn.ghost{background:rgba(255,255,255,.05);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.btn.ghost:hover{background:rgba(34,211,238,.1)}
+.btn.pink{background:linear-gradient(135deg,var(--mag),#fb923c);color:#2a0a18;box-shadow:0 6px 22px rgba(244,114,182,.35)}
+.btn.lime{background:linear-gradient(135deg,var(--lime),#4ade80);color:#0c1a05;box-shadow:0 6px 22px rgba(163,230,53,.3)}
+.btn.sm{padding:9px 16px;font-size:13.5px;border-radius:10px}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.navrow{display:flex;justify-content:space-between;gap:12px;margin:26px 0 10px}
+.navrow .spacer{flex:1}
+
+/* ---------- quiz ---------- */
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin:12px 0}
+.qhead{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
+.qnum{
+  flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
+  font-family:'Orbitron';font-weight:700;font-size:14px;color:#04121a;
+  background:linear-gradient(135deg,var(--cyan),var(--lime));
+}
+.qtag{flex:none;font-size:13px;margin-top:7px}
+.qtext{font-size:15.5px;font-weight:600;line-height:1.55;margin-top:4px}
+.opts{display:grid;gap:10px;margin-top:12px}
+.opt{
+  text-align:left;font-family:'Inter';font-size:14.5px;font-weight:500;color:var(--ink);
+  background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.12);
+  border-radius:12px;padding:12px 14px;cursor:pointer;transition:all .15s;width:100%;
+}
+.opt:hover:not(:disabled){border-color:var(--cyan);background:rgba(34,211,238,.08)}
+.opt .k{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.1);font-weight:700;font-size:13px;margin-right:10px}
+.opt.picked{border-color:var(--amber);background:rgba(251,191,36,.1)}
+.opt.correct{border-color:var(--lime);background:rgba(163,230,53,.13);box-shadow:0 0 14px rgba(163,230,53,.25)}
+.opt.wrong{border-color:var(--red);background:rgba(251,113,133,.12);animation:shake .35s}
+.opt.dim{opacity:.55}
+.opt:disabled{cursor:default}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.fb{
+  display:none;margin-top:12px;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.6;
+  background:rgba(34,211,238,.08);border:1px solid var(--line);color:var(--ink);
+}
+.fb.show{display:block;animation:fadeUp .3s}
+.fb b{color:var(--cyan)}
+.scorebox{
+  display:none;text-align:center;padding:22px;border-radius:18px;margin:16px 0;
+  background:linear-gradient(135deg,rgba(34,211,238,.14),rgba(244,114,182,.12));
+  border:1px solid var(--line);
+}
+.scorebox.show{display:block;animation:fadeUp .4s}
+.scorebox .big{font-family:'Orbitron';font-size:40px;font-weight:800;
+  background:linear-gradient(92deg,var(--cyan),var(--lime));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stars{font-size:26px;letter-spacing:4px;margin:6px 0}
+
+/* ---------- materi widgets ---------- */
+.nlwrap{background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:14px;padding:14px 8px;margin:12px 0;overflow-x:auto}
+.nlwrap svg{display:block;min-width:560px;width:100%;height:auto}
+.seg{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.seg .btn.sm.on{background:linear-gradient(135deg,var(--lime),#4ade80);color:#0c1a05}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.tab{
+  font-family:'Orbitron';font-weight:700;font-size:14px;padding:11px 18px;border-radius:12px;cursor:pointer;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--mut);
+}
+.tab.on{background:linear-gradient(135deg,var(--cyan),#7dd3fc);color:#04121a;border-color:transparent;box-shadow:0 4px 16px rgba(34,211,238,.35)}
+.tabpane{display:none}
+.tabpane.on{display:block;animation:fadeUp .35s}
+.rule{background:rgba(163,230,53,.07);border:1px solid rgba(163,230,53,.3);border-radius:12px;padding:12px 14px;font-size:14.5px;line-height:1.6;margin:10px 0}
+.rule b{color:var(--lime)}
+.steps{display:none;margin-top:10px;border-left:3px solid var(--cyan);padding-left:14px}
+.steps.show{display:block;animation:fadeUp .3s}
+.steps li{margin:8px 0;color:var(--mut);font-size:14.5px;line-height:1.6;list-style:none}
+.steps li b{color:var(--ink)}
+table.mini{width:100%;border-collapse:collapse;margin:10px 0;font-size:14.5px}
+table.mini th,table.mini td{border:1px solid var(--line);padding:9px 10px;text-align:center}
+table.mini th{background:rgba(34,211,238,.1);color:var(--cyan);font-weight:700}
+.cmp{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.cmp input{
+  width:90px;text-align:center;font-size:20px;font-weight:700;font-family:'Orbitron';
+  background:rgba(0,0,0,.35);border:1.5px solid var(--line);border-radius:12px;color:var(--ink);padding:10px;
+}
+.cmp input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 12px rgba(34,211,238,.3)}
+.cmpresult{display:none;margin-top:6px}
+.cmpresult.show{display:block;animation:fadeUp .3s}
+.bigexpr{font-family:'Orbitron';font-size:clamp(30px,7vw,52px);font-weight:800;text-align:center;margin:8px 0;
+  background:linear-gradient(92deg,var(--lime),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ---------- matching ---------- */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media(max-width:560px){.match-grid{grid-template-columns:1fr}}
+.mcol h4{text-align:center;color:var(--mut);font-size:13px;letter-spacing:.1em;margin-bottom:8px}
+.mcard{
+  font-family:'Orbitron';font-size:17px;font-weight:700;text-align:center;cursor:pointer;
+  background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.14);
+  border-radius:14px;padding:16px 10px;margin:8px 0;transition:all .15s;color:var(--ink);width:100%;
+}
+.mcard .tag{display:block;font-size:12px;margin-top:6px;font-family:'Inter';font-weight:600;color:var(--mut)}
+.mcard:hover:not(:disabled){border-color:var(--cyan);transform:translateY(-2px)}
+.mcard.sel{border-color:var(--amber);background:rgba(251,191,36,.12);box-shadow:0 0 16px rgba(251,191,36,.3)}
+.mcard.done{border-color:var(--lime);background:rgba(163,230,53,.12);color:var(--lime);cursor:default;box-shadow:0 0 14px rgba(163,230,53,.25)}
+.mcard.err{animation:shake .35s;border-color:var(--red)}
+
+/* ---------- forms / LKPD ---------- */
+label.f{display:block;font-size:13px;font-weight:600;color:var(--mut);margin:12px 0 6px;letter-spacing:.03em}
+input.t,textarea.t,select.t{
+  width:100%;font-family:'Inter';font-size:14.5px;color:var(--ink);
+  background:rgba(0,0,0,.35);border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;
+}
+input.t:focus,textarea.t:focus,select.t:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 12px rgba(34,211,238,.25)}
+textarea.t{min-height:88px;resize:vertical;line-height:1.6}
+table.lkpd{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+table.lkpd th,table.lkpd td{border:1px solid var(--line);padding:9px;text-align:center}
+table.lkpd th{background:rgba(34,211,238,.1);color:var(--cyan)}
+table.lkpd td input{width:100%;background:transparent;border:none;border-bottom:1.5px dashed rgba(255,255,255,.25);color:var(--ink);text-align:center;font-size:14px;padding:6px}
+table.lkpd td input:focus{outline:none;border-bottom-color:var(--cyan)}
+.stepnum{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:9px;font-family:'Orbitron';font-weight:700;font-size:13px;
+  background:linear-gradient(135deg,var(--mag),#fb923c);color:#2a0a18;margin-right:8px}
+details.guru{margin:14px 0;border:1px dashed rgba(251,191,36,.5);border-radius:14px;padding:14px 16px;background:rgba(251,191,36,.05)}
+details.guru summary{cursor:pointer;font-weight:700;color:var(--amber);font-size:15px}
+details.guru .kunci{margin-top:10px;font-size:14px;line-height:1.8;color:var(--mut)}
+details.guru .kunci b{color:var(--lime)}
+
+/* ---------- apersepsi reveal ---------- */
+.pemantik{cursor:pointer}
+.pemantik .hint{display:none;margin-top:10px;padding:11px 13px;border-radius:10px;background:rgba(163,230,53,.07);border:1px solid rgba(163,230,53,.3);font-size:14px;line-height:1.6;color:var(--ink)}
+.pemantik .hint.show{display:block;animation:fadeUp .3s}
+.pemantik .tap{font-size:12.5px;color:var(--cyan);font-weight:600}
+
+/* ---------- reflection ---------- */
+.emo{display:flex;gap:10px;margin:8px 0 4px}
+.emo button{
+  font-size:30px;background:rgba(255,255,255,.05);border:2px solid transparent;border-radius:14px;
+  width:58px;height:58px;cursor:pointer;transition:all .15s;
+}
+.emo button:hover{transform:scale(1.1)}
+.emo button.on{border-color:var(--lime);background:rgba(163,230,53,.12);box-shadow:0 0 14px rgba(163,230,53,.3)}
+
+/* ---------- map modal ---------- */
+.overlay{position:fixed;inset:0;z-index:100;background:rgba(4,7,20,.8);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:18px}
+.overlay.show{display:flex;animation:fadeUp .3s}
+.sheet{background:var(--bg2);border:1px solid var(--line);border-radius:22px;max-width:640px;width:100%;max-height:86vh;overflow:auto;padding:26px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.sheet h3{margin-bottom:4px}
+.map-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+@media(max-width:520px){.map-grid{grid-template-columns:1fr}}
+.node{
+  display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;
+  background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:14px;padding:12px;color:var(--ink);
+  font-family:'Inter';font-size:13.5px;font-weight:600;transition:all .15s;width:100%;
+}
+.node:hover{border-color:var(--cyan);transform:translateY(-2px)}
+.node .ic{font-size:24px}
+.node .st{margin-left:auto;font-size:15px;color:var(--lime)}
+.node.cur{border-color:var(--cyan);box-shadow:0 0 14px rgba(34,211,238,.3)}
+
+/* ---------- cover art ---------- */
+.cover-art{margin:18px 0;border-radius:20px;overflow:hidden;border:1px solid var(--line);background:rgba(0,0,0,.35)}
+.cover-art svg{display:block;width:100%;height:auto}
+@keyframes dash{to{stroke-dashoffset:-40}}
+.flow{stroke-dasharray:8 8;animation:dash 1.6s linear infinite}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.floaty{animation:floaty 4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.pulse{animation:pulse 2s ease-in-out infinite}
+
+/* ---------- misc ---------- */
+.note{font-size:13px;color:var(--mut);line-height:1.6}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:20px 0}
+.center{text-align:center}
+.mt{margin-top:14px}.mb{margin-bottom:14px}
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);z-index:200;
+  background:#0d1533;border:1px solid var(--lime);color:var(--ink);padding:12px 22px;border-radius:14px;
+  font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:all .3s;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.confetti{position:fixed;top:-12px;z-index:300;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.kv{display:flex;gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px dashed rgba(255,255,255,.08);font-size:14.5px}
+.kv b{color:var(--cyan);min-width:110px}
+
+/* ---------- print (LKPD) ---------- */
+@media print{
+  body{background:#fff;color:#111}
+  body::before{display:none}
+  .topbar,.navrow,.noprint,.overlay,.toast{display:none!important}
+  .screen{display:none!important}
+  #screen-lkpd{display:block!important}
+  .card,.qcard{background:#fff!important;border:1px solid #999!important;box-shadow:none!important;color:#111}
+  .card p,.note,label.f{color:#333!important}
+  h1.title,h2.stitle,.display{color:#111!important;-webkit-text-fill-color:#111!important;background:none!important}
+  input.t,textarea.t,select.t{border:1px solid #999!important;color:#111!important;background:#fff!important}
+  .print-val{border-bottom:1px solid #333;min-height:22px;padding:4px 2px;font-size:14px;color:#111;white-space:pre-wrap}
+}
+
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 4px;font-weight:700}
+.frac .nu{border-bottom:2.5px solid var(--cyan);padding:0 8px}
+.frac .de{padding:0 8px}
+.conv{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.conv input{width:80px;text-align:center;font-size:20px;font-weight:700;font-family:'Orbitron';
+  background:rgba(0,0,0,.35);border:1.5px solid var(--line);border-radius:12px;color:var(--ink);padding:10px}
+.conv input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 12px rgba(34,211,238,.3)}
+.convres{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+@media(max-width:560px){.convres{grid-template-columns:1fr}}
+.convbox{background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.convbox .lab{font-size:12px;color:var(--mut);letter-spacing:.08em;font-weight:700}
+.convbox .val{font-family:'Orbitron';font-size:24px;font-weight:800;margin-top:6px;
+  background:linear-gradient(92deg,var(--lime),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+.ratiobar{display:flex;align-items:flex-end;gap:14px;justify-content:center;margin:14px 0;min-height:120px}
+.rbar{width:74px;border-radius:10px 10px 4px 4px;display:flex;align-items:flex-start;justify-content:center;
+  padding-top:10px;font-family:'Orbitron';font-weight:800;color:#04121a;transition:height .6s ease}
+
+table.bedah{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+table.bedah th,table.bedah td{border:1px solid var(--line);padding:9px 10px;text-align:left}
+table.bedah th{background:rgba(34,211,238,.1);color:var(--cyan);width:38%}
+.var-x{font-family:'Orbitron';font-weight:800;font-size:1.15em;color:var(--lime)}
+.miniq{margin:10px 0;padding:12px;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.25)}
+.miniq .opts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.miniq .fb2{display:none;margin-top:8px;font-size:13.5px}
+.miniq .fb2.show{display:block}
+
+.seg{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.seg .btn.on{border-color:var(--lime);color:var(--lime)}
+table.bedah{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+table.bedah th,table.bedah td{border:1px solid var(--line);padding:9px 10px;text-align:left}
+table.bedah th{background:rgba(34,211,238,.1);color:var(--cyan);width:38%}
+table.mini{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+table.mini th,table.mini td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+table.mini th{background:rgba(34,211,238,.08);color:var(--cyan)}
+.labbox{display:flex;gap:26px;align-items:flex-end;justify-content:center;margin:16px 0;flex-wrap:wrap}
+.labrect{border:3px solid;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Orbitron';font-weight:700;min-width:40px;min-height:40px;transition:all .2s}
+input[type=range]{accent-color:var(--cyan);width:160px}
+.verdict{font-family:'Orbitron';font-weight:800;font-size:20px;text-align:center;margin-top:10px}
+.verdict.ok{color:var(--lime)} .verdict.no{color:var(--pink)}
+.gfooter{max-width:1100px;margin:26px auto 44px;padding:18px 16px 0;text-align:center;color:var(--mut);font-size:13px;border-top:1px solid var(--line)}
+.studio{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:12px 0}
+.studio label{font-size:13px;color:var(--mut);display:flex;flex-direction:column;gap:6px}
+.studio input{background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:10px;font-size:16px;width:100%}
+.studio input:focus{outline:none;border-color:var(--cyan)}
+.barsvg{width:100%;max-width:460px;display:block;margin:8px auto}
+.detwrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+@media(max-width:640px){.detwrap{grid-template-columns:1fr}}
+.detcard{border:2px solid var(--line);border-radius:14px;padding:10px;cursor:pointer;background:rgba(0,0,0,.25);transition:border-color .2s}
+.detcard:hover{border-color:var(--cyan)}
+.detcard.right{border-color:var(--lime);box-shadow:0 0 14px rgba(163,230,53,.35)}
+.detcard.wrong{border-color:var(--pink);box-shadow:0 0 14px rgba(244,114,182,.35)}
+.detcard h4{text-align:center;margin:6px 0;font-size:14px}
+.miniq{margin:10px 0;padding:12px;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.25)}
+.miniq .opts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.miniq .fb2{display:none;margin-top:8px;font-size:13.5px}
+.miniq .fb2.show{display:block}
+
+.pow{font-family:'Orbitron';font-weight:800;color:var(--lime)}
+select.t{background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:10px;font-size:15px}
+select.t:focus{outline:none;border-color:var(--cyan)}
+.expansion{font-size:15px;color:var(--mut);word-break:break-all;line-height:1.9}
+.expansion b{color:var(--ink)}
+
+.rad{font-family:'Orbitron';font-weight:800;color:var(--lime)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.tab{padding:10px 16px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.3);color:var(--mut);font-weight:700;cursor:pointer;font-size:14px}
+.tab.on{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 12px rgba(34,211,238,.3)}
+.tabpane{display:none}
+.tabpane.on{display:block;animation:fadein .3s}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.fk{font-family:'Orbitron';font-weight:800;color:var(--lime)}
+.miniq{margin:10px 0;padding:12px;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.25)}
+.miniq .opts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.miniq .fb2{display:none;margin-top:8px;font-size:13.5px}
+.miniq .fb2.show{display:block}
+table.bedah{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+table.bedah th,table.bedah td{border:1px solid var(--line);padding:9px 10px;text-align:left}
+table.bedah th{background:rgba(34,211,238,.1);color:var(--cyan);width:38%}
+.seg{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.seg .btn.on{border-color:var(--lime);color:var(--lime)}
+</style>
+</head>
+<body>
+
+<header class="topbar noprint">
+  <div class="inner">
+    <div class="brand"><span class="logo">🛰</span><span class="display">MISI KUADRAT</span></div>
+    <div class="prog">
+      <span id="progText">Tahap 1 / 14</span>
+      <div class="pbar"><i id="progBar"></i></div>
+    </div>
+    <a class="btn ghost sm" href="https://mpi.gezytech.web.id" style="text-decoration:none">🏠 Portal</a><button class="btn ghost sm" onclick="openMap()">🗺 Peta</button>
+  </div>
+</header>
+
+<div class="overlay" id="mapOverlay" onclick="if(event.target===this)closeMap()">
+  <div class="sheet">
+    <h3 class="display">🗺 PETA MISI</h3>
+    <p class="note">Pilih tahap untuk melompat. Tanda ✓ = sudah dikunjungi.</p>
+    <div class="map-grid" id="mapGrid"></div>
+    <div class="center mt"><button class="btn ghost sm" onclick="closeMap()">Tutup</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="doneOverlay">
+  <div class="sheet center">
+    <div style="font-size:64px">🏆</div>
+    <h2 class="display" style="margin:8px 0">MISI SELESAI!</h2>
+    <p class="lead" style="margin:0 auto 14px">Luar biasa, Penjelajah! Kamu telah menuntaskan seluruh 14 tahap Misi Fungsi Kuadrat.</p>
+    <div id="doneRecap" style="text-align:left"></div>
+    <p class="note mt">Fungsi kuadrat ada di mana-mana: lintasan bola, jembatan lengkung, sampai keuntungan maksimum! ⚽</p>
+    <div class="mt"><button class="btn" onclick="closeDone()">Kembali ke Peta Misi</button></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ============ 1. COVER ============ -->
+<section class="screen" id="screen-cover" data-title="Cover" data-icon="🚀">
+  <div class="stage-head center" style="margin-top:34px">
+    <span class="kicker">Matematika • Kelas 9 • Fase D • Bab 3 • Semester 1</span>
+    <h1 class="title display">MISI<br>FUNGSI KUADRAT</h1>
+    <p class="lead" style="margin:0 auto">Petualangan digital 14 tahap: bedah parabola — temukan sumbu simetri, titik puncak, dan nilai optimumnya!</p>
+  </div>
+
+  <div class="cover-art">
+    <svg viewBox="0 0 800 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustrasi parabola dengan titik puncak dan sumbu simetri">
+      <defs>
+        <filter id="glow15" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <g font-family="Orbitron, sans-serif" font-weight="800">
+        <g class="floaty">
+          <path d="M160,240 C280,240 330,140 400,70 C470,140 520,240 640,240" fill="none" stroke="#a3e635" stroke-width="5" filter="url(#glow15)"/>
+          <line x1="400" y1="40" x2="400" y2="255" stroke="#7dd3fc" stroke-width="2" stroke-dasharray="8 5"/>
+          <circle cx="400" cy="70" r="10" fill="#f472b6" filter="url(#glow15)"/>
+          <text x="400" y="262" text-anchor="middle" font-size="15" fill="#7dd3fc">sumbu simetri</text>
+          <text x="560" y="60" text-anchor="middle" font-size="16" fill="#f472b6">titik puncak ⭐</text>
+        </g>
+        <g class="pulse">
+          <text x="400" y="30" text-anchor="middle" font-size="22" fill="#fff">y = ax² + bx + c</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="chiprow" style="justify-content:center">
+    <span class="chip">⏱ 2 × 40 menit</span>
+    <span class="chip">🖥 PID • 📱 HP • 💻 Laptop</span>
+    <span class="chip">🎮 14 tahap misi</span>
+    <span class="chip">🟢🟡🔴 3 level tantangan</span>
+  </div>
+
+  <div class="center" style="margin:26px 0">
+    <button class="btn big" onclick="go('tujuan')">▶ MULAI MISI</button>
+    <p class="note mt">Klik <b>MULAI MISI</b> — atau buka 🗺 Peta untuk melompat ke tahap mana pun.</p>
+  </div>
+</section>
+
+<!-- ============ 2. TUJUAN ============ -->
+<section class="screen" id="screen-tujuan" data-title="Tujuan Pembelajaran" data-icon="🎯">
+  <div class="stage-head">
+    <span class="kicker">Tahap 2 • Tujuan</span>
+    <h2 class="stitle display">🎯 TARGET MISIMU</h2>
+    <p class="lead"><b>Setelah belajar, saya dapat …</b> (sesuai CP Matematika Fase D)</p>
+  </div>
+  <div class="grid2">
+    <div class="card glow"><h3>🔍 1. Mengidentifikasi</h3><p>Mengidentifikasi fungsi kuadrat dan unsur-unsurnya (a, b, c, arah parabola).</p></div>
+    <div class="card glow"><h3>⭐ 2. Menentukan Puncak</h3><p>Menentukan sumbu simetri, titik puncak, dan nilai optimum.</p></div>
+    <div class="card glow"><h3>📈 3. Menganalisis Grafik</h3><p>Menganalisis grafik fungsi kuadrat: arah, titik potong, dan sketsa.</p></div>
+    <div class="card glow"><h3>🌍 4. Memecahkan Masalah</h3><p>Menyelesaikan permasalahan kontekstual terkait fungsi kuadrat.</p></div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 3. APERSEPSI ============ -->
+<section class="screen" id="screen-apersepsi" data-title="Apersepsi" data-icon="💡">
+  <div class="stage-head">
+    <span class="kicker">Tahap 3 • Apersepsi</span>
+    <h2 class="stitle display">💡 PARABOLA DI SEKITARMU</h2>
+    <p class="lead">Kakak kelas persamaan kuadrat sudah kamu taklukkan — kini saatnya melihatnya sebagai <b>grafik</b>!</p>
+  </div>
+  <div class="grid2">
+    <div class="card glow"><h3>⚽ Bola Melambung Lagi</h3><p>Bola mencapai titik <b>tertinggi</b> 5 m pada detik ke-2. Titik tertinggi = <b>nilai maksimum</b> fungsi!</p></div>
+    <div class="card glow"><h3>🌉 Jembatan Lengkung</h3><p>Lengkungan jembatan gantung berbentuk parabola — dirancang dengan fungsi kuadrat agar kuat!</p></div>
+  </div>
+  <h3 class="display mt" style="font-size:16px">❓ PERTANYAAN PEMANTIK <span class="note">(klik untuk arah diskusi)</span></h3>
+  <div class="card pemantik" onclick="this.querySelector('.hint').classList.toggle('show')">
+    <h3>1. Grafik y = x² dan y = −x² — apa bedanya? <span class="tap">👆 klik</span></h3>
+    <div class="hint">💬 <b>Arah diskusi:</b> y = x² membuka ke <b>atas</b> ⛰️ (punya titik terendah), y = −x² membuka ke <b>bawah</b> 🌋 (punya titik tertinggi). Penentunya: tanda <b>a</b>!</div>
+  </div>
+  <div class="card pemantik" onclick="this.querySelector('.hint').classList.toggle('show')">
+    <h3>2. Parabola y = x² − 4 memotong sumbu-x di mana? <span class="tap">👆 klik</span></h3>
+    <div class="hint">💬 <b>Arah diskusi:</b> y = 0 → x² = 4 → <b>x = 2 atau x = −2</b>. Titik potong sumbu-x = akar-akar persamaan kuadratnya — materi Bab 2 kepakai lagi! 🔗</div>
+  </div>
+  <div class="card pemantik" onclick="this.querySelector('.hint').classList.toggle('show')">
+    <h3>3. Mengapa pedagang ingin tahu "keuntungan maksimum"? <span class="tap">👆 klik</span></h3>
+    <div class="hint">💬 <b>Arah diskusi:</b> Karena keuntungan sering berbentuk parabola yang membuka ke bawah — puncaknya = <b>untung terbesar</b>! Di misi ini kamu hitung puncaknya. 💰</div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 4. ASESMEN AWAL ============ -->
+<section class="screen" id="screen-asesmen-awal" data-title="Asesmen Awal" data-icon="🩺">
+  <div class="stage-head">
+    <span class="kicker">Tahap 4 • Asesmen Awal (Diagnostik)</span>
+    <h2 class="stitle display">🩺 CEK KONDISI AWAL</h2>
+    <p class="lead">Jawab dengan jujur — <b>ini bukan nilai!</b> Hasilnya jadi peta: bagian mana yang sudah kamu kuasai, mana yang perlu dijelajahi.</p>
+  </div>
+  <div id="quizAwal"></div>
+  <div class="center noprint" style="margin:16px 0">
+    <button class="btn" id="cekAwal" onclick="checkQuiz('awal')">✓ CEK JAWABAN</button>
+  </div>
+  <div class="scorebox" id="hasilAwal"></div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 5. MATERI 1 ============ -->
+<section class="screen" id="screen-materi-1" data-title="Materi 1: Anatomi Parabola" data-icon="📘">
+  <div class="stage-head">
+    <span class="kicker">Tahap 5 • Materi 1</span>
+    <h2 class="stitle display">📘 ANATOMI PARABOLA</h2>
+    <p class="lead"><b>Satu ide:</b> pada <span class="fk">y = ax² + bx + c</span> — tanda <b>a</b> menentukan arah buka, <b>c</b> = titik potong sumbu-y.</p>
+  </div>
+  <div class="grid3">
+    <div class="card glow"><h3>⛰️ a &gt; 0</h3><p>Parabola membuka<br>ke <b>atas</b>.<br>Punya titik <b>terendah</b>.</p></div>
+    <div class="card glow"><h3>🌋 a &lt; 0</h3><p>Parabola membuka<br>ke <b>bawah</b>.<br>Punya titik <b>tertinggi</b>.</p></div>
+    <div class="card glow"><h3>📍 c</h3><p>Titik potong sumbu-y<br>adalah <b>(0, c)</b>.<br>Saat x = 0, y = c!</p></div>
+  </div>
+  <div class="card">
+    <h3>🔬 PEMBEDAH PARABOLA <span class="note">— pilih fungsinya!</span></h3>
+    <div class="seg noprint" id="bedahBtns">
+      <button class="btn sm ghost on" onclick="bedahParabola(0,this)">y = x² − 4</button>
+      <button class="btn sm ghost" onclick="bedahParabola(1,this)">y = −x² + 2x + 3</button>
+      <button class="btn sm ghost" onclick="bedahParabola(2,this)">y = 2x² − 8x + 6</button>
+      <button class="btn sm ghost" onclick="bedahParabola(3,this)">y = −3x² + 6x</button>
+    </div>
+    <div id="bedahOut"></div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 6. MATERI 2 ============ -->
+<section class="screen" id="screen-materi-2" data-title="Materi 2: Titik Puncak" data-icon="📗">
+  <div class="stage-head">
+    <span class="kicker">Tahap 6 • Materi 2</span>
+    <h2 class="stitle display">📗 MENUJU PUNCAK ⭐</h2>
+    <p class="lead"><b>Satu ide:</b> sumbu simetri <span class="fk">x = −b/2a</span> — cerminkan parabola, lalu hitung nilai optimumnya!</p>
+  </div>
+  <div class="card glow center">
+    <div style="font-size:22px;font-family:'Orbitron';font-weight:800">x<sub>p</sub> = −b / 2a &nbsp;→&nbsp; y<sub>p</sub> = f(x<sub>p</sub>)</div>
+    <p class="mt">a &gt; 0 → y<sub>p</sub> = nilai <b>minimum</b> &nbsp;•&nbsp; a &lt; 0 → y<sub>p</sub> = nilai <b>maksimum</b></p>
+  </div>
+  <div class="card">
+    <h3>⭐ KALKULATOR PUNCAK <span class="note">— coba sendiri!</span></h3>
+    <p class="note">Isi a, b, c — lihat sumbu simetri, titik puncak, dan nilai optimumnya!</p>
+    <div class="conv noprint" style="flex-wrap:wrap">
+      <span class="f">y = <input id="pkA" type="number" value="1" style="width:64px" aria-label="a">x² +</span>
+      <span class="f"><input id="pkB" type="number" value="-6" style="width:64px" aria-label="b">x +</span>
+      <span class="f"><input id="pkC" type="number" value="5" style="width:64px" aria-label="c"></span>
+      <button class="btn sm" onclick="kalkPuncak()">⚡ HITUNG</button>
+    </div>
+    <div class="cmpresult" id="pkResult"></div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 7. MATERI 3 ============ -->
+<section class="screen" id="screen-materi-3" data-title="Materi 3: Aksi Nyata" data-icon="📙">
+  <div class="stage-head">
+    <span class="kicker">Tahap 7 • Materi 3</span>
+    <h2 class="stitle display">📙 AKSI NYATA 🌍</h2>
+    <p class="lead"><b>Satu ide:</b> "maksimum/minimum" di soal cerita = <b>nilai optimum</b> di titik puncak!</p>
+  </div>
+  <div class="card glow">
+    <div class="rule">📌 <b>Jurus:</b> tulis model fungsinya → hitung x<sub>p</sub> = −b/2a → hitung y<sub>p</sub> = f(x<sub>p</sub>) → jawab sesuai pertanyaan!</div>
+    <button class="btn sm ghost noprint" onclick="document.getElementById('st3').classList.toggle('show')">👁 Lihat contoh langkah</button>
+    <ol class="steps" id="st3">
+      <li>1️⃣ <b>Bola: h = −5t² + 20t.</b> Tinggi maksimum?<br>t<sub>p</sub> = −20/(2·−5) = 2 → h(2) = −20 + 40 = <b>20 m</b> ⚽</li>
+      <li>2️⃣ <b>Untung: P = −2x² + 40x − 100</b> (ribu rupiah). Untung maksimum?<br>x<sub>p</sub> = −40/(2·−2) = 10 → P(10) = −200 + 400 − 100 = <b>100 ribu</b> 💰</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h3>🎯 MISI PUNCAK <span class="note">— klik jawabanmu!</span></h3>
+    <div class="miniq" id="mq0">
+      <b>1.</b> f(x) = x² − 6x + 5. Sumbu simetrinya …
+      <div class="opts noprint">
+        <button class="btn sm ghost" onclick="misiPuncak(0,0,this)">x = 3</button>
+        <button class="btn sm ghost" onclick="misiPuncak(0,1,this)">x = −3</button>
+        <button class="btn sm ghost" onclick="misiPuncak(0,2,this)">x = 6</button>
+      </div>
+      <div class="fb2" id="mqf0"></div>
+    </div>
+    <div class="miniq" id="mq1">
+      <b>2.</b> y = −x² + 4x. Nilai maksimumnya …
+      <div class="opts noprint">
+        <button class="btn sm ghost" onclick="misiPuncak(1,0,this)">4</button>
+        <button class="btn sm ghost" onclick="misiPuncak(1,1,this)">2</button>
+        <button class="btn sm ghost" onclick="misiPuncak(1,2,this)">0</button>
+      </div>
+      <div class="fb2" id="mqf1"></div>
+    </div>
+    <div class="miniq" id="mq2">
+      <b>3.</b> Bola: h = −5t² + 20t. Tinggi maksimum …
+      <div class="opts noprint">
+        <button class="btn sm ghost" onclick="misiPuncak(2,0,this)">20 m</button>
+        <button class="btn sm ghost" onclick="misiPuncak(2,1,this)">10 m</button>
+        <button class="btn sm ghost" onclick="misiPuncak(2,2,this)">40 m</button>
+      </div>
+      <div class="fb2" id="mqf2"></div>
+    </div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 8. AKTIVITAS INTERAKTIF ============ -->
+<section class="screen" id="screen-aktivitas" data-title="Aktivitas: Misi Pencocokan" data-icon="🎮">
+  <div class="stage-head">
+    <span class="kicker">Tahap 8 • Aktivitas Interaktif</span>
+    <h2 class="stitle display">🎮 MISI PENCOCOKAN</h2>
+    <p class="lead"><b>Tujuan:</b> menentukan sumbu simetri, titik puncak, dan nilai optimum dengan tepat.<br><b>Cara main:</b> ketuk 1 kartu <b>soal</b>, lalu ketuk kartu <b>jawaban</b> yang cocok. Level: 🟢 mudah 🟡 sedang 🔴 menantang.</p>
+  </div>
+  <div class="card">
+    <div class="center"><span class="chip" id="matchProg">0 / 6 pasangan</span> <span class="chip">❌ salah: <b id="matchErr">0</b></span></div>
+    <div class="match-grid">
+      <div class="mcol"><h4>🧩 SOAL</h4><div id="matchQ"></div></div>
+      <div class="mcol"><h4>🎯 JAWABAN</h4><div id="matchA"></div></div>
+    </div>
+    <div class="fb" id="matchDone"></div>
+    <div class="center noprint mt"><button class="btn sm ghost" onclick="initMatch()">🔁 Acak &amp; Ulangi</button></div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 9. LKPD ============ -->
+<section class="screen" id="screen-lkpd" data-title="LKPD Digital" data-icon="📝">
+  <div class="stage-head">
+    <span class="kicker">Tahap 9 • LKPD Digital</span>
+    <h2 class="stitle display">📝 LKPD 15 — BERPETUALANG DENGAN FUNGSI KUADRAT</h2>
+    <p class="lead"><b>Tujuan:</b> (1) mengidentifikasi unsur fungsi kuadrat; (2) menemukan pola geseran parabola.</p>
+  </div>
+  <div class="card">
+    <h3><span class="stepnum">!</span>Petunjuk</h3>
+    <p>1. Isi nama dan kelasmu. &nbsp;2. Kerjakan Aktivitas 1–3 berurutan. &nbsp;3. Diskusikan dengan teman sebangku. &nbsp;4. Klik <b>Cetak LKPD</b> jika ingin dikumpulkan ke guru.</p>
+    <div class="grid2">
+      <div><label class="f">Nama</label><input class="t" id="lkpdNama" placeholder="Nama lengkap"></div>
+      <div><label class="f">Kelas</label><input class="t" id="lkpdKelas" placeholder="cth: IX-A"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="stepnum">1</span>Mengamati — Bedah Fungsi 🔬</h3>
+    <p>Tentukan a, arah buka, c, dan sumbu simetri!</p>
+    <table class="lkpd">
+      <tr><th>Fungsi</th><th>a</th><th>Arah</th><th>c</th><th>Sumbu simetri</th></tr>
+      <tr><td><b>y = x² − 4</b></td><td><input aria-label="a1" style="width:52px"></td><td><input aria-label="arah1" style="width:70px"></td><td><input aria-label="c1" style="width:52px"></td><td><input aria-label="sb1" style="width:70px"></td></tr>
+      <tr><td><b>y = −2x² + 8x − 5</b></td><td><input aria-label="a2" style="width:52px"></td><td><input aria-label="arah2" style="width:70px"></td><td><input aria-label="c2" style="width:52px"></td><td><input aria-label="sb2" style="width:70px"></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3><span class="stepnum">2</span>Mencoba — Temukan Puncaknya! ⭐</h3>
+    <table class="lkpd">
+      <tr><th>Fungsi</th><th>Titik puncak</th><th>Min/Maks?</th></tr>
+      <tr><td><b>y = x² − 4x + 3</b></td><td><input aria-label="puncak 1"></td><td><input aria-label="minmaks 1" style="width:80px"></td></tr>
+      <tr><td><b>y = −x² + 6x − 5</b></td><td><input aria-label="puncak 2"></td><td><input aria-label="minmaks 2" style="width:80px"></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3><span class="stepnum">3</span>Menganalisis — Pola Geseran ✨</h3>
+    <p>Bandingkan ketiga grafik: y = x², y = x² + 2, y = x² − 2. Apa yang berubah dan apa yang tetap?</p>
+    <table class="lkpd">
+      <tr><th>Fungsi</th><th>Titik puncak</th></tr>
+      <tr><td><b>y = x²</b></td><td><input aria-label="g1"></td></tr>
+      <tr><td><b>y = x² + 2</b></td><td><input aria-label="g2"></td></tr>
+      <tr><td><b>y = x² − 2</b></td><td><input aria-label="g3"></td></tr>
+    </table>
+    <label class="f">Kesimpulan polamu (apa efek mengubah nilai c?):</label>
+    <textarea class="t" id="lkpdPola" placeholder="Tulis kesimpulanmu dengan bahasamu sendiri…"></textarea>
+    <label class="f">Diskusi: mengapa a tidak boleh 0 pada fungsi kuadrat? Jelaskan!</label>
+    <textarea class="t" id="lkpdDiskusi" placeholder="Pendapatmu…"></textarea>
+  </div>
+
+  <div class="card">
+    <h3>💎 Kesimpulanku Hari Ini</h3>
+    <textarea class="t" id="lkpdSimpulan" placeholder="Satu hal terpenting yang kupelajari tentang fungsi kuadrat adalah…"></textarea>
+    <div class="center noprint mt">
+      <button class="btn" onclick="printLKPD()">🖨 CETAK LKPD</button>
+      <button class="btn ghost" onclick="copyLKPD()">📋 Salin Jawaban</button>
+    </div>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 10. KUIS ============ -->
+<section class="screen" id="screen-kuis" data-title="Kuis Interaktif" data-icon="🏆">
+  <div class="stage-head">
+    <span class="kicker">Tahap 10 • Kuis</span>
+    <h2 class="stitle display">🏆 KUIS KILAT</h2>
+    <p class="lead">8 soal campuran: pilihan ganda, benar/salah, studi kasus, dan HOTS. Level 🟢🟡🔴. Semangat!</p>
+  </div>
+  <div id="quizKuis"></div>
+  <div class="center noprint" style="margin:16px 0">
+    <button class="btn pink" id="cekKuis" onclick="checkQuiz('kuis')">✓ CEK JAWABAN</button>
+  </div>
+  <div class="scorebox" id="hasilKuis"></div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 11. REFLEKSI ============ -->
+<section class="screen" id="screen-refleksi" data-title="Refleksi" data-icon="🪞">
+  <div class="stage-head">
+    <span class="kicker">Tahap 11 • Refleksi</span>
+    <h2 class="stitle display">🪞 CERMIN MISI</h2>
+    <p class="lead">Berhenti sejenak. Pilih emoji yang mewakili perasaanmu, lalu tulis catatanmu.</p>
+  </div>
+  <div class="card">
+    <h3>1. Apa hal baru yang saya pelajari? 🆕</h3>
+    <div class="emo noprint" data-r="r1"><button>😟</button><button>😐</button><button>😊</button><button>🤩</button></div>
+    <textarea class="t mt" id="rt1" placeholder="Hal baru yang kupelajari…"></textarea>
+  </div>
+  <div class="card">
+    <h3>2. Bagian mana yang paling saya pahami? 💪</h3>
+    <div class="emo noprint" data-r="r2"><button>😟</button><button>😐</button><button>😊</button><button>🤩</button></div>
+    <textarea class="t mt" id="rt2" placeholder="Bagian yang paling kupahami…"></textarea>
+  </div>
+  <div class="card">
+    <h3>3. Bagian mana yang masih membingungkan? 🤔</h3>
+    <div class="emo noprint" data-r="r3"><button>😟</button><button>😐</button><button>😊</button><button>🤩</button></div>
+    <textarea class="t mt" id="rt3" placeholder="Bagian yang masih membingungkan…"></textarea>
+  </div>
+  <div class="card">
+    <h3>4. Bagaimana pengetahuan ini berguna dalam hidupku? 🌍</h3>
+    <div class="emo noprint" data-r="r4"><button>😟</button><button>😐</button><button>😊</button><button>🤩</button></div>
+    <textarea class="t mt" id="rt4" placeholder="Contoh: bola, keuntungan, jembatan…"></textarea>
+  </div>
+  <div class="center noprint"><button class="btn lime" onclick="saveRefleksi()">💾 SIMPAN REFLEKSI</button></div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 12. ASESMEN AKHIR ============ -->
+<section class="screen" id="screen-asesmen-akhir" data-title="Asesmen Akhir" data-icon="📊">
+  <div class="stage-head">
+    <span class="kicker">Tahap 12 • Asesmen Akhir (Sumatif)</span>
+    <h2 class="stitle display">📊 UJIAN AKHIR MISI</h2>
+    <p class="lead">8 soal penutup: konsep, penerapan, analisis, dan konteks nyata. Tunjukkan kemampuan terbaikmu!</p>
+  </div>
+  <div id="quizAkhir"></div>
+  <div class="center noprint" style="margin:16px 0">
+    <button class="btn pink" id="cekAkhir" onclick="checkQuiz('akhir')">✓ CEK JAWABAN</button>
+  </div>
+  <div class="scorebox" id="hasilAkhir"></div>
+  <details class="guru">
+    <summary>🔑 Kunci Jawaban &amp; Pedoman Penilaian (Guru)</summary>
+    <div class="kunci">
+      <b>Kunci:</b> 1-A (y=x²−3x+2) &nbsp;2-Benar &nbsp;3-A (x=2) &nbsp;4-A ((0,−6)) &nbsp;5-A (−1) &nbsp;6-A (16 m) &nbsp;7-A (100 ribu) &nbsp;8-Salah<br><br>
+      <b>Pedoman penilaian:</b> Nilai = (jawaban benar ÷ 8) × 100.<br>
+      • 90–100 : Sangat Baik — siap lanjut materi berikutnya<br>
+      • 75–89 &nbsp;: Baik — mantap, sedikit penguatan<br>
+      • 60–74 &nbsp;: Cukup — perlu bimbingan pada soal yang salah<br>
+      • &lt; 60 &nbsp;&nbsp;: Perlu pembelajaran remedial terbimbing (bukan sekadar mengulang tes)
+    </div>
+  </details>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 13. KESIMPULAN ============ -->
+<section class="screen" id="screen-kesimpulan" data-title="Kesimpulan" data-icon="💎">
+  <div class="stage-head">
+    <span class="kicker">Tahap 13 • Kesimpulan</span>
+    <h2 class="stitle display">💎 INTI MISIMU</h2>
+    <p class="lead">Tiga hal yang wajib menempel di kepalamu setelah misi ini:</p>
+  </div>
+  <div class="grid3">
+    <div class="card glow"><h3>🔬 Anatomi</h3><p><span class="fk">y = ax²+bx+c</span><br>a&gt;0 buka atas ⛰️<br>a&lt;0 buka bawah 🌋<br>c = potong sumbu-y.</p></div>
+    <div class="card glow"><h3>⭐ Puncak</h3><p>x<sub>p</sub> = <b>−b/2a</b><br>y<sub>p</sub> = f(x<sub>p</sub>)<br>Titik (x<sub>p</sub>, y<sub>p</sub>).</p></div>
+    <div class="card glow"><h3>📈 Optimum</h3><p>a&gt;0 → <b>minimum</b>.<br>a&lt;0 → <b>maksimum</b>.<br>Soal cerita = cari y<sub>p</sub>!</p></div>
+  </div>
+  <div class="card">
+    <h3>📣 Pesan Misi</h3>
+    <p style="font-size:16px;color:var(--ink)">"Setiap parabola punya puncak — dan setiap usaha punya titik tertingginya. Temukan dengan rumus, raih dengan kerja keras."</p>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn" onclick="next()">LANJUT →</button></div>
+</section>
+
+<!-- ============ 14. PENUTUP ============ -->
+<section class="screen" id="screen-penutup" data-title="Penutup" data-icon="🏁">
+  <div class="stage-head center" style="margin-top:30px">
+    <div style="font-size:70px">🏁</div>
+    <span class="kicker">Tahap 14 • Penutup</span>
+    <h2 class="stitle display">MISI SELESAI, PENJELAJAH!</h2>
+    <p class="lead" style="margin:0 auto">Kamu sudah menaklukkan fungsi kuadrat! Parabola kini jadi temanmu. 💪</p>
+  </div>
+  <div class="card glow center">
+    <h3>🌟 Tantangan Terakhir</h3>
+    <p>Lempar bola ke atas, rekam dengan HP! Perkirakan <b>titik tertingginya</b> — lalu buat model fungsi kuadratnya! ⚽📱</p>
+  </div>
+  <div class="center" style="margin:24px 0;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <button class="btn ghost big" onclick="ulangi()">🔁 ULANGI</button>
+    <button class="btn lime big" onclick="selesai()">✓ SELESAI</button>
+  </div>
+  <div class="navrow"><button class="btn ghost" onclick="back()">← KEMBALI</button><button class="btn ghost" onclick="openMap()">🗺 PETA MISI</button></div>
+</section>
+
+</div><!-- /wrap -->
+<footer class="gfooter">@2026 Gezytech Platform MPI. Dikembangkan oleh PakGun</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= NAVIGASI ================= */
+const ORDER=['cover','tujuan','apersepsi','asesmen-awal','materi-1','materi-2','materi-3','aktivitas','lkpd','kuis','refleksi','asesmen-akhir','kesimpulan','penutup'];
+let cur=0; const visited=new Set();
+const state={scores:{awal:null,kuis:null,akhir:null},matchBest:null};
+
+function go(id){
+  const i=ORDER.indexOf(id); if(i<0)return;
+  cur=i; visited.add(id);
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  document.getElementById('progText').textContent='Tahap '+(i+1)+' / '+ORDER.length;
+  document.getElementById('progBar').style.width=((i+1)/ORDER.length*100)+'%';
+  buildMap(); window.scrollTo({top:0,behavior:'smooth'});
+}
+function next(){ if(cur<ORDER.length-1) go(ORDER[cur+1]); }
+function back(){ if(cur>0) go(ORDER[cur-1]); }
+
+function buildMap(){
+  const g=document.getElementById('mapGrid'); g.innerHTML='';
+  ORDER.forEach((id,i)=>{
+    const s=document.getElementById('screen-'+id);
+    const b=document.createElement('button');
+    b.className='node'+(id===ORDER[cur]?' cur':'');
+    b.innerHTML='<span class="ic">'+s.dataset.icon+'</span><span>'+(i+1)+'. '+s.dataset.title+'</span><span class="st">'+(visited.has(id)?'✓':'')+'</span>';
+    b.onclick=()=>{closeMap();go(id);};
+    g.appendChild(b);
+  });
+}
+function openMap(){buildMap();document.getElementById('mapOverlay').classList.add('show');}
+function closeMap(){document.getElementById('mapOverlay').classList.remove('show');}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2200);}
+function fmtN(x){return (Math.round(x*100)/100).toLocaleString('id-ID',{maximumFractionDigits:2});}
+
+/* ================= PEMBEDAH PARABOLA ================= */
+const BEDAH=[
+ {fn:'y = x² − 4',
+  rows:[['a','1 → membuka ke <b>ATAS</b> ⛰️'],['b','0'],['c','−4 → potong sumbu-y di <b>(0,−4)</b>'],['Sumbu simetri','x = −0/2 = <b>0</b>']]},
+ {fn:'y = −x² + 2x + 3',
+  rows:[['a','−1 → membuka ke <b>BAWAH</b> 🌋'],['b','2'],['c','3 → potong sumbu-y di <b>(0,3)</b>'],['Sumbu simetri','x = −2/(2·−1) = <b>1</b>']]},
+ {fn:'y = 2x² − 8x + 6',
+  rows:[['a','2 → membuka ke <b>ATAS</b> ⛰️'],['b','−8'],['c','6 → potong sumbu-y di <b>(0,6)</b>'],['Sumbu simetri','x = 8/4 = <b>2</b>']]},
+ {fn:'y = −3x² + 6x',
+  rows:[['a','−3 → membuka ke <b>BAWAH</b> 🌋'],['b','6'],['c','0 → melalui <b>(0,0)</b>!'],['Sumbu simetri','x = −6/(2·−3) = <b>1</b>']]}
+];
+function bedahParabola(i,btn){
+  document.querySelectorAll('#bedahBtns .btn').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  const d=BEDAH[i];
+  document.getElementById('bedahOut').innerHTML=
+    '<table class="bedah"><caption class="display" style="caption-side:top;padding:8px;color:var(--lime)">'+d.fn+'</caption>'
+    +d.rows.map(r=>'<tr><th>'+r[0]+'</th><td>'+r[1]+'</td></tr>').join('')+'</table>';
+}
+
+/* ================= KALKULATOR PUNCAK ================= */
+function kalkPuncak(){
+  const a=parseFloat(document.getElementById('pkA').value);
+  const b=parseFloat(document.getElementById('pkB').value);
+  const c=parseFloat(document.getElementById('pkC').value);
+  const box=document.getElementById('pkResult');
+  if([a,b,c].some(isNaN)){toast('Isi a, b, c dengan bilangan!');return;}
+  if(a===0){toast('a tidak boleh 0 — itu bukan fungsi kuadrat!');return;}
+  const xp=-b/(2*a), yp=a*xp*xp+b*xp+c;
+  const jenis=a>0?'nilai <b>minimum</b> ⛰️':'nilai <b>maksimum</b> 🌋';
+  box.innerHTML='<div class="bigexpr">puncak ('+fmtN(xp)+', '+fmtN(yp)+')</div>'
+    +'<p class="note center">x<sub>p</sub> = −b/2a = −('+b+')/(2·'+a+') = <b>'+fmtN(xp)+'</b>'
+    +'<br>y<sub>p</sub> = f('+fmtN(xp)+') = <b>'+fmtN(yp)+'</b>'
+    +'<br>a = '+a+' '+(a>0?'&gt;':'&lt;')+' 0 → '+jenis
+    +'<br>Sumbu simetri: <b>x = '+fmtN(xp)+'</b> ✅</p>';
+  box.classList.add('show');
+}
+
+/* ================= MISI PUNCAK ================= */
+const MISI_PK=[
+ {a:0,fb:'x<sub>p</sub> = −(−6)/(2·1) = 6/2 = <b>3</b>!'},
+ {a:0,fb:'x<sub>p</sub> = −4/(2·−1) = 2 → y = −4 + 8 = <b>4</b>!'},
+ {a:0,fb:'t<sub>p</sub> = −20/(2·−5) = 2 → h(2) = −20 + 40 = <b>20 m</b>! ⚽'}
+];
+function misiPuncak(qi,oi,btn){
+  const wrap=document.getElementById('mq'+qi);
+  if(wrap.dataset.done)return;
+  wrap.dataset.done='1';
+  const f=document.getElementById('mqf'+qi);
+  const benar=oi===MISI_PK[qi].a;
+  f.innerHTML=(benar?'✅ <b>Tepat!</b> ':'❌ <b>Kurang tepat.</b> ')+MISI_PK[qi].fb;
+  f.classList.add('show');
+  wrap.querySelectorAll('.opts .btn').forEach((b,bi)=>{
+    b.disabled=true;
+    if(bi===MISI_PK[qi].a){b.classList.remove('ghost');b.style.borderColor='var(--lime)';b.style.color='var(--lime)';}
+    else if(bi===oi){b.style.borderColor='var(--pink)';b.style.color='var(--pink)';}
+  });
+}
+</script>
+
+<script>
+/* ================= BANK SOAL ================= */
+const Q={
+awal:{mount:'quizAwal',btn:'cekAwal',out:'hasilAwal',mode:'diag',qs:[
+ {t:'pg',tag:'🟢',q:'Bentuk umum fungsi kuadrat …',o:['f(x) = ax² + bx + c','f(x) = ax + b','f(x) = a/x','f(x) = ax³'],a:0,fb:'<b>f(x) = ax² + bx + c</b> dengan a ≠ 0!'},
+ {t:'bs',tag:'🟢',q:'"Grafik fungsi kuadrat berbentuk parabola."',o:['Benar','Salah'],a:0,fb:'<b>Benar.</b> Lengkungan khas parabola!'},
+ {t:'pg',tag:'🟡',q:'Grafik y = x² − 4 memotong sumbu-y di …',o:['(0,−4)','(4,0)','(0,4)','(−4,0)'],a:0,fb:'x = 0 → y = −4 → <b>(0,−4)</b>.'},
+ {t:'pg',tag:'🟡',q:'Parabola y = −2x² + 3x + 1 membuka ke …',o:['bawah','atas','kanan','kiri'],a:0,fb:'a = −2 &lt; 0 → membuka ke <b>bawah</b> 🌋.'}
+]},
+kuis:{mount:'quizKuis',btn:'cekKuis',out:'hasilKuis',mode:'stars',qs:[
+ {t:'pg',tag:'🟢',q:'Grafik y = 2x² − 3x + 1 membuka ke …',o:['atas','bawah','kanan','kiri'],a:0,fb:'a = 2 &gt; 0 → <b>atas</b> ⛰️.'},
+ {t:'bs',tag:'🟢',q:'"Sumbu simetri parabola y = x² adalah sumbu-y."',o:['Benar','Salah'],a:0,fb:'<b>Benar.</b> x = 0 = sumbu-y!'},
+ {t:'pg',tag:'🟡',q:'Sumbu simetri y = x² − 6x + 8 adalah …',o:['x = 3','x = −3','x = 6','x = −6'],a:0,fb:'x = 6/2 = <b>3</b>.'},
+ {t:'pg',tag:'🟡',q:'Nilai minimum y = x² − 4x + 7 adalah …',o:['3','7','−3','11'],a:0,fb:'x<sub>p</sub> = 2 → y = 4 − 8 + 7 = <b>3</b>.'},
+ {t:'bs',tag:'🟡',q:'"Titik potong sumbu-y dari y = ax² + bx + c adalah (0,c)."',o:['Benar','Salah'],a:0,fb:'<b>Benar.</b> Substitusi x = 0!'},
+ {t:'pg',tag:'🔴',q:'Nilai maksimum y = −x² + 2x + 8 adalah …',o:['9','8','1','10'],a:0,fb:'x<sub>p</sub> = 1 → y = −1 + 2 + 8 = <b>9</b>.'},
+ {t:'pg',tag:'🔴',q:'Titik puncak y = x² + 4x + 4 adalah …',o:['(−2,0)','(2,0)','(0,4)','(−2,8)'],a:0,fb:'x<sub>p</sub> = −2 → y = 4 − 8 + 4 = 0 → <b>(−2,0)</b>.'},
+ {t:'pg',tag:'🟡',q:'y = −3x² + 12x − 7, sumbu simetrinya …',o:['x = 2','x = −2','x = 6','x = −6'],a:0,fb:'x = −12/(2·−3) = <b>2</b>.'}
+]},
+akhir:{mount:'quizAkhir',btn:'cekAkhir',out:'hasilAkhir',mode:'nilai',qs:[
+ {t:'pg',tag:'🟢',q:'Yang merupakan fungsi kuadrat …',o:['y = x² − 3x + 2','y = 2x + 1','y = x³ − 1','y = 5/x'],a:0,fb:'Hanya <b>y = x² − 3x + 2</b> yang berpangkat 2!'},
+ {t:'bs',tag:'🟢',q:'"a > 0 → parabola membuka ke atas."',o:['Benar','Salah'],a:0,fb:'<b>Benar.</b> ⛰️'},
+ {t:'pg',tag:'🟡',q:'Sumbu simetri y = 2x² − 8x + 1 adalah …',o:['x = 2','x = −2','x = 4','x = 8'],a:0,fb:'x = 8/4 = <b>2</b>.'},
+ {t:'pg',tag:'🟡',q:'Titik potong sumbu-y y = −x² + 5x − 6 …',o:['(0,−6)','(0,6)','(−6,0)','(6,0)'],a:0,fb:'x = 0 → y = −6 → <b>(0,−6)</b>.'},
+ {t:'pg',tag:'🟡',q:'Nilai minimum y = 2x² − 4x + 1 adalah …',o:['−1','1','3','−3'],a:0,fb:'x<sub>p</sub> = 1 → y = 2 − 4 + 1 = <b>−1</b>.'},
+ {t:'pg',tag:'🔴',q:'Bola: h = −4t² + 16t. Tinggi maksimum …',o:['16 m','4 m','32 m','8 m'],a:0,fb:'t<sub>p</sub> = 2 → h = −16 + 32 = <b>16 m</b>.'},
+ {t:'pg',tag:'🔴',q:'Untung P = −2x² + 40x − 100 (ribu Rp). Untung maksimum …',o:['100 ribu','40 ribu','200 ribu','10 ribu'],a:0,fb:'x<sub>p</sub> = 10 → P = −200 + 400 − 100 = <b>100 ribu</b> 💰.'},
+ {t:'bs',tag:'🟡',q:'"Titik puncak parabola selalu titik minimum."',o:['Benar','Salah'],a:1,fb:'<b>Salah.</b> Kalau a &lt; 0, puncaknya titik <b>maksimum</b>!'}
+]}};
+const sel={awal:[],kuis:[],akhir:[]};
+const done={awal:false,kuis:false,akhir:false};
+
+function renderQuiz(key){
+  const cfg=Q[key],box=document.getElementById(cfg.mount);
+  sel[key]=cfg.qs.map(()=>null); done[key]=false;
+  document.getElementById(cfg.out).classList.remove('show');
+  const btn=document.getElementById(cfg.btn);
+  btn.disabled=false; btn.innerHTML='✓ CEK JAWABAN';
+  btn.onclick=()=>checkQuiz(key);
+  box.innerHTML=cfg.qs.map((q,qi)=>{
+    const opts=q.o.map((op,oi)=>{
+      const k=q.t==='pg'?String.fromCharCode(65+oi):'';
+      return '<button class="opt" data-qi="'+qi+'" data-oi="'+oi+'" onclick="pickOpt(\''+key+'\','+qi+','+oi+')"><span class="k">'+k+'</span>'+op+'</button>';
+    }).join('');
+    return '<div class="qcard"><div class="qhead"><span class="qnum">'+(qi+1)+'</span><span class="qtag">'+q.tag+'</span><div class="qtext">'+q.q+'</div></div>'
+      +'<div class="opts">'+opts+'</div><div class="fb" id="fb-'+key+'-'+qi+'"></div></div>';
+  }).join('');
+}
+function pickOpt(key,qi,oi){
+  if(done[key])return;
+  sel[key][qi]=oi;
+  document.querySelectorAll('#'+Q[key].mount+' .opt[data-qi="'+qi+'"]').forEach(b=>{
+    b.classList.toggle('picked',+b.dataset.oi===oi);
+  });
+}
+function checkQuiz(key){
+  const cfg=Q[key],n=cfg.qs.length;
+  let benar=0;
+  cfg.qs.forEach((q,qi)=>{
+    const chosen=sel[key][qi];
+    const btns=[...document.querySelectorAll('#'+cfg.mount+' .opt[data-qi="'+qi+'"]')];
+    btns.forEach(b=>{b.disabled=true;b.classList.remove('picked');});
+    if(chosen===q.a){
+      benar++;
+      btns[q.a].classList.add('correct');
+      btns.forEach((b,oi)=>{if(oi!==q.a)b.classList.add('dim');});
+    }else{
+      btns[q.a].classList.add('correct');
+      if(chosen!==null&&chosen!==undefined)btns[chosen].classList.add('wrong');
+      btns.forEach((b,oi)=>{if(oi!==q.a&&oi!==chosen)b.classList.add('dim');});
+    }
+    const f=document.getElementById('fb-'+key+'-'+qi);
+    f.innerHTML=(chosen===q.a?'✅ <b>Betul!</b> ':'❌ <b>Kurang tepat.</b> ')+q.fb;
+    f.classList.add('show');
+  });
+  done[key]=true;
+  const nilai=Math.round(benar/n*100);
+  state.scores[key]=benar;
+  const out=document.getElementById(cfg.out);
+  let extra='';
+  if(cfg.mode==='diag'){
+    extra=benar===n?'🟢 <b>Fondasimu kuat!</b> Tinggal pertajam di materi.':(benar>=2?'🟡 <b>Bagus!</b> Perhatikan materi yang berkaitan dengan soal yang salah.':'🔵 <b>Santai</b> — misi ini dirancang membantumu dari nol. Ikuti tiap tahap!');
+  }else if(cfg.mode==='stars'){
+    const st=benar>=7?'⭐⭐⭐':benar>=5?'⭐⭐':benar>=3?'⭐':'';
+    extra=(st?'<div class="stars">'+st+'</div>':'')+(benar>=7?'🏅 <b>Master Parabola!</b> Luar biasa!':benar>=5?'💪 <b>Hebat!</b> Sedikit lagi sempurna.':benar>=3?'👍 <b>Bagus</b>, terus berlatih!':'🔁 <b>Jangan menyerah</b> — ulangi materinya, lalu coba lagi!');
+  }else{
+    extra='Nilai: <b>'+nilai+'</b> — '+(nilai>=90?'Sangat Baik 🌟':nilai>=75?'Baik ✅':nilai>=60?'Cukup 📝':'Perlu bimbingan 💬');
+  }
+  out.innerHTML='<div class="big">'+benar+' / '+n+'</div><div class="mt">'+extra+'</div>';
+  out.classList.add('show');
+  const btn=document.getElementById(cfg.btn);
+  btn.innerHTML='🔁 ULANGI'; btn.onclick=()=>renderQuiz(key);
+  out.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+/* ================= MISI PENCOCOKAN ================= */
+const PAIRS=[
+ {q:'Sumbu simetri y=x²−4x',a:'x = 2',tag:'🟢'},
+ {q:'y = −x² membuka ke',a:'bawah',tag:'🟢'},
+ {q:'Nilai min y=x²−2x+5',a:'4',tag:'🟡'},
+ {q:'Potong sumbu-y y=3x²−5',a:'(0,−5)',tag:'🟡'},
+ {q:'Nilai maks y=−2x²+8x−3',a:'5',tag:'🔴'},
+ {q:'Puncak y=x²+6x+9',a:'(−3, 0)',tag:'🔴'}
+];
+let mQ=null,mA=null,mFound=0,mErr=0;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function initMatch(){
+  mQ=null;mA=null;mFound=0;mErr=0;
+  document.getElementById('matchErr').textContent='0';
+  document.getElementById('matchProg').textContent='0 / '+PAIRS.length+' pasangan';
+  document.getElementById('matchDone').classList.remove('show');
+  const qi=shuffle(PAIRS.map((_,i)=>i)), ai=shuffle(PAIRS.map((_,i)=>i));
+  document.getElementById('matchQ').innerHTML=qi.map(i=>'<button class="mcard" data-i="'+i+'" onclick="pickM(\'q\','+i+',this)">'+PAIRS[i].q+'<span class="tag">'+PAIRS[i].tag+'</span></button>').join('');
+  document.getElementById('matchA').innerHTML=ai.map(i=>'<button class="mcard" data-i="'+i+'" onclick="pickM(\'a\','+i+',this)">'+PAIRS[i].a+'<span class="tag">'+PAIRS[i].tag+'</span></button>').join('');
+}
+function pickM(which,i,btn){
+  if(btn.classList.contains('done'))return;
+  if(which==='q'){mQ={i,btn};document.querySelectorAll('#matchQ .mcard').forEach(b=>b.classList.remove('sel'));}
+  else{mA={i,btn};document.querySelectorAll('#matchA .mcard').forEach(b=>b.classList.remove('sel'));}
+  btn.classList.add('sel');
+  if(mQ&&mA){
+    if(mQ.i===mA.i){
+      mQ.btn.classList.add('done');mA.btn.classList.add('done');
+      mQ.btn.disabled=mA.btn.disabled=true;
+      mQ=null;mA=null;mFound++;
+      document.getElementById('matchProg').textContent=mFound+' / '+PAIRS.length+' pasangan';
+      if(mFound===PAIRS.length){
+        const d=document.getElementById('matchDone');
+        d.innerHTML='🎉 <b>MISI TUNTAS!</b> Semua '+PAIRS.length+' pasangan cocok'+(mErr===0?' <b>tanpa satu pun kesalahan</b> — sempurna! 🌟':' dengan '+mErr+' kesalahan. '+(mErr<=2?'Hebat, hampir sempurna! 💪':'Coba lagi untuk hasil sempurna! 🔁'));
+        d.classList.add('show');
+        if(state.matchBest===null||mErr<state.matchBest)state.matchBest=mErr;
+        d.scrollIntoView({behavior:'smooth',block:'center'});
+      }
+    }else{
+      mErr++;document.getElementById('matchErr').textContent=mErr;
+      const b1=mQ.btn,b2=mA.btn;
+      b1.classList.add('err');b2.classList.add('err');
+      mQ=null;mA=null;
+      setTimeout(()=>{b1.classList.remove('err','sel');b2.classList.remove('err','sel');},500);
+    }
+  }
+}
+
+/* ================= LKPD ================= */
+let _lkpdBackup=[];
+function printLKPD(){
+  document.body.classList.add('print-lkpd');
+  _lkpdBackup=[];
+  document.querySelectorAll('#screen-lkpd input,#screen-lkpd textarea,#screen-lkpd select').forEach(f=>{
+    const v=f.value||'';
+    const s=document.createElement('div');s.className='print-val';s.textContent=v;
+    f.parentNode.insertBefore(s,f);f.style.display='none';
+    _lkpdBackup.push({f,s});
+  });
+  window.print();
+}
+window.onafterprint=()=>{
+  document.body.classList.remove('print-lkpd');
+  _lkpdBackup.forEach(({f,s})=>{s.remove();f.style.display='';});
+  _lkpdBackup=[];
+};
+function copyLKPD(){
+  const g=id=>document.getElementById(id).value||'-';
+  const rows=[...document.querySelectorAll('#screen-lkpd table.lkpd input')].map(i=>i.value||'-');
+  const txt='LKPD 15 — Fungsi Kuadrat\nNama: '+g('lkpdNama')+' | Kelas: '+g('lkpdKelas')
+    +'\n\nA1. y=x²−4: a='+rows[0]+', arah='+rows[1]+', c='+rows[2]+', sb='+rows[3]
+    +'\nA1. y=−2x²+8x−5: a='+rows[4]+', arah='+rows[5]+', c='+rows[6]+', sb='+rows[7]
+    +'\nA2. y=x²−4x+3: puncak='+rows[8]+' ('+rows[9]+')'
+    +'\nA2. y=−x²+6x−5: puncak='+rows[10]+' ('+rows[11]+')'
+    +'\nA3. Puncak: '+rows[12]+' / '+rows[13]+' / '+rows[14]
+    +'\nA3. Kesimpulan: '+g('lkpdPola')
+    +'\nDiskusi: '+g('lkpdDiskusi')
+    +'\nKesimpulan: '+g('lkpdSimpulan');
+  const done2=()=>toast('📋 Jawaban LKPD disalin!');
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done2).catch(()=>fallbackCopy(txt,done2));}
+  else fallbackCopy(txt,done2);
+}
+function fallbackCopy(txt,cb){
+  const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);
+  ta.select();try{document.execCommand('copy');}catch(e){}ta.remove();cb();
+}
+
+/* ================= REFLEKSI ================= */
+const emoSel={};
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.emo button');if(!b)return;
+  const wrap=b.parentElement;
+  wrap.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');emoSel[wrap.dataset.r]=b.textContent;
+});
+function saveRefleksi(){
+  const data={r1:{e:emoSel.r1||'',t:document.getElementById('rt1').value},
+              r2:{e:emoSel.r2||'',t:document.getElementById('rt2').value},
+              r3:{e:emoSel.r3||'',t:document.getElementById('rt3').value},
+              r4:{e:emoSel.r4||'',t:document.getElementById('rt4').value}};
+  try{localStorage.setItem('misiFungsiKuadrat_refleksi',JSON.stringify(data));}catch(e){}
+  toast('💾 Refleksi tersimpan di perangkat ini!');
+}
+function loadRefleksi(){
+  try{
+    const d=JSON.parse(localStorage.getItem('misiFungsiKuadrat_refleksi')||'null');if(!d)return;
+    ['r1','r2','r3','r4'].forEach((k,i)=>{
+      document.getElementById('rt'+(i+1)).value=d[k].t||'';
+      if(d[k].e){document.querySelector('.emo[data-r="'+k+'"]').querySelectorAll('button').forEach(b=>{if(b.textContent===d[k].e){b.classList.add('on');emoSel[k]=d[k].e;}});}
+    });
+  }catch(e){}
+}
+
+/* ================= SELESAI / ULANGI ================= */
+function selesai(){
+  const s=state.scores;
+  const fmt=(v,n)=>v===null?'—':v+'/'+n;
+  document.getElementById('doneRecap').innerHTML=
+    '<div class="kv"><b>🩺 Asesmen Awal</b><span>'+fmt(s.awal,4)+'</span></div>'
+   +'<div class="kv"><b>🏆 Kuis Kilat</b><span>'+fmt(s.kuis,8)+'</span></div>'
+   +'<div class="kv"><b>📊 Asesmen Akhir</b><span>'+fmt(s.akhir,8)+'</span></div>'
+   +'<div class="kv"><b>🎮 Pencocokan</b><span>'+(state.matchBest===null?'—':'terbaik: '+state.matchBest+' salah')+'</span></div>';
+  document.getElementById('doneOverlay').classList.add('show');
+  confetti();
+}
+function closeDone(){document.getElementById('doneOverlay').classList.remove('show');openMap();}
+function ulangi(){
+  ['awal','kuis','akhir'].forEach(renderQuiz);
+  initMatch();
+  state.scores={awal:null,kuis:null,akhir:null};state.matchBest=null;
+  go('cover');toast('🔁 Misi dimulai ulang dari awal!');
+}
+function confetti(){
+  const colors=['#22d3ee','#f472b6','#a3e635','#fbbf24','#fff'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');c.className='confetti';
+    c.style.left=Math.random()*100+'vw';
+    c.style.background=colors[i%colors.length];
+    const sz=6+Math.random()*8;
+    c.style.width=sz+'px';c.style.height=sz*(Math.random()>.5?1:.4)+'px';
+    c.style.animationDuration=(2.2+Math.random()*2)+'s';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4500);
+  }
+}
+
+/* ================= INIT ================= */
+document.addEventListener('DOMContentLoaded',()=>{
+  renderQuiz('awal');renderQuiz('kuis');renderQuiz('akhir');
+  initMatch();loadRefleksi();bedahParabola(0);kalkPuncak();
+  go('cover');
+});
+</script>
+</body>
+</html>
